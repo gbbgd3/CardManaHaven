@@ -46,22 +46,22 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_13_060243) do
   end
 
   create_table "yugioh_cards", force: :cascade do |t|
+    t.integer "card_id"
     t.string "name"
     t.string "card_type"
+    t.integer "level"
+    t.string "attribute_of_card"
+    t.string "archetype"
+    t.text "description_of_card"
     t.integer "atk"
     t.integer "def"
-    t.integer "level"
-    t.string "attribute"
-    t.string "archetype"
     t.string "image"
-    t.string "card_id"
-    t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "yugioh_sets", force: :cascade do |t|
-    t.string "set_id"
+    t.integer "set_id"
     t.string "set_name"
     t.string "set_code"
     t.date "release_date"

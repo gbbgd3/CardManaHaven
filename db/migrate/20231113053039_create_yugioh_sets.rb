@@ -1,7 +1,7 @@
 class CreateYugiohSets < ActiveRecord::Migration[7.1]
   def change
     create_table :yugioh_sets do |t|
-      t.string :set_id
+      t.integer :set_id
       t.string :set_name
       t.string :set_code
       t.date :release_date
