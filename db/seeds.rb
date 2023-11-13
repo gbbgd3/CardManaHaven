@@ -49,7 +49,7 @@ card_data.each do |row|
     level: row['level'],
     attribute_of_card: row['attribute'],
     archetype: row['archetype'],
-    image: row['img'],
+    image: row['image_url'],
     card_id: row['card_id'.to_i],
     description_of_card: row['desc']
   )
@@ -63,11 +63,13 @@ csv.each do |row|
   set = YugiohSet.find_by(set_id: row['set_id'].to_i)
 
   next unless card.present? && set.present?
-    cardset = YugiohCardSet.create(
-      yugioh_card_id: card.id,
-      yugioh_set_id: set.id,
-      set_rarity: row['set_rarity'],
-      set_code: row['set_rarity_code']
-    )
+    existing_record = YugiohCardSet.find_by(yugioh_card_id: card.id, yugioh_set_id: set.id)
+    next if existing_record.present?
+      cardset = YugiohCardSet.create(
+        yugioh_card_id: card.id,
+        yugioh_set_id: set.id,
+        set_rarity: row['set_rarity'],
+        set_code: row['set_rarity_code']
+      )
 end
 puts 'Finished Seeding joiner table.'

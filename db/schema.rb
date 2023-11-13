@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_13_060243) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_13_114820) do
   create_table "categories", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -41,6 +41,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_13_060243) do
     t.string "set_rarity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["yugioh_card_id", "yugioh_set_id"], name: "unique_card_set_index", unique: true
     t.index ["yugioh_card_id"], name: "index_yugioh_card_sets_on_yugioh_card_id"
     t.index ["yugioh_set_id"], name: "index_yugioh_card_sets_on_yugioh_set_id"
   end

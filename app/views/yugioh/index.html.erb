@@ -1,0 +1,15 @@
+<% @yugioh_cards.each do |y| %>
+    <% if y.yugioh_card_sets.present? %>
+        <% if y.image.present?%>
+            <% y.attributes.each do |attr, val|%>
+                <% if val.present? && attr != 'image'%>     
+                    <p><%= attr %>: <%= val %>
+                <%end%>
+            <% end %>
+            <%= image_tag(image_path(y.image), alt: 'Card Image', style: 'max-height: 200px; max-width: 400px') %>
+        <% end %>
+        <% y.yugioh_card_sets.each do |cs| %>
+            <%= cs.set_code + "  " + cs.set_rarity + "  " + cs.yugioh_set.set_name + " " +   cs.yugioh_set.set_code + " " + cs.yugioh_set.release_date.to_s%>
+        <% end %>
+    <% end %>
+<% end %>
