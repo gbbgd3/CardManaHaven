@@ -31,19 +31,37 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_13_060243) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["productable_type", "productable_id"], name: "index_products_on_productable"
+    t.index ["productable_type", "productable_id"], name: "product_id", unique: true
   end
 
   create_table "yugioh_card_sets", force: :cascade do |t|
+    t.integer "yugioh_card_id"
+    t.integer "yugioh_set_id"
+    t.string "set_code"
+    t.string "set_rarity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["yugioh_card_id"], name: "index_yugioh_card_sets_on_yugioh_card_id"
+    t.index ["yugioh_set_id"], name: "index_yugioh_card_sets_on_yugioh_set_id"
   end
 
   create_table "yugioh_cards", force: :cascade do |t|
+    t.string "name"
+    t.string "card_type"
+    t.integer "atk"
+    t.integer "def"
+    t.integer "level"
+    t.string "attribute"
+    t.string "archetype"
+    t.string "image"
+    t.string "card_id"
+    t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "yugioh_sets", force: :cascade do |t|
+    t.string "set_id"
     t.string "set_name"
     t.string "set_code"
     t.date "release_date"
@@ -51,4 +69,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_13_060243) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "yugioh_card_sets", "yugioh_cards"
+  add_foreign_key "yugioh_card_sets", "yugioh_sets"
 end
