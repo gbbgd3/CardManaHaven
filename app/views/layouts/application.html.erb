@@ -6,11 +6,15 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <script src="https://cdn.tailwindcss.com"></script>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
-    <%= yield %>
+    <%= render partial: 'layouts/common/navbar'%>
+    <div class="container mx-auto px-12">
+      <%= yield %>
+    </div>
   </body>
 </html>
