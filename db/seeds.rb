@@ -73,3 +73,49 @@ csv.each do |row|
       )
 end
 puts 'Finished Seeding joiner table.'
+
+
+puts 'Updating joiner table and reprints'
+all = YugiohCard.all
+all.each do |card|
+  if(card.yugioh_card_sets.present?)
+    card.yugioh_card_sets.each do |cs|
+      new_card = YugiohCard.create(
+        name: cs.yugioh_card.name,
+        card_type: cs.yugioh_card.card_type,
+        level: cs.yugioh_card.level,
+        attribute_of_card: cs.yugioh_card.attribute_of_card,
+        archetype: cs.yugioh_card.archetype,
+        description_of_card: cs.yugioh_card.description_of_card,
+        atk: cs.yugioh_card.atk,
+        def: cs.yugioh_card.def,
+        image: cs.yugioh_card.image
+        )
+          
+        new_card_set = YugiohCardSet.create(
+          yugioh_card_id: new_card.id,
+          yugioh_set_id: cs.yugioh_set_id,
+          set_rarity: cs.set_rarity,
+          set_code: cs.set_code
+        )
+        end
+      else
+        new_card = YugiohCard.create(
+          name: card.name,
+          card_type: card.card_type,
+          level: card.level,
+          attribute_of_card: card.attribute_of_card,
+          archetype: card.archetype,
+          description_of_card: card.description_of_card,
+          atk: card.atk,
+          def: card.def,
+          image: card.image
+        )
+    end
+end
+
+puts "Deleting old card data"
+YugiohCardSet.where(yugioh_card_id: YugiohCard.where.not(card_id: nil)).destroy_all
+YugiohCard.where.not(card_id: nil).destroy_all
+
+puts "Done."

@@ -1,15 +1,10 @@
 <% @yugioh_cards.each do |y| %>
+        <h4>Card Name: <%= y.name %></h4>
     <% if y.yugioh_card_sets.present? %>
-        <% if y.image.present?%>
-            <% y.attributes.each do |attr, val|%>
-                <% if val.present? && attr != 'image'%>     
-                    <p><%= attr %>: <%= val %>
-                <%end%>
-            <% end %>
-            <%= image_tag(image_path(y.image), alt: 'Card Image', style: 'max-height: 200px; max-width: 400px') %>
-        <% end %>
         <% y.yugioh_card_sets.each do |cs| %>
-            <%= cs.set_code + "  " + cs.set_rarity + "  " + cs.yugioh_set.set_name + " " +   cs.yugioh_set.set_code + " " + cs.yugioh_set.release_date.to_s%>
+        <p><%= cs.set_rarity + ' ' + cs.yugioh_set.set_name %></p>
         <% end %>
     <% end %>
+        <% reprint_count = @yugioh_cards.where('name IS ?', y.name).count%>
+        <%= (reprint_count.present? && reprint_count > 1) ? button_to('View Reprints', root_path) : ''%>
 <% end %>
