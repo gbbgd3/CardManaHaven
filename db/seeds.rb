@@ -14,12 +14,7 @@ YugiohCardSet.destroy_all
 Category.destroy_all
 YugiohCard.destroy_all
 YugiohSet.destroy_all
-
-puts 'Creating Categories...'
-categories = ['Yugioh', 'Magic The Gathering', 'Card Sleeves', 'Playmats']
-categories.each do |c|
-  Category.create(name: c)
-end
+Product.destroy_all
 
 yugioh_card_path    = 'db/csv/yugioh/cards.csv'
 yugioh_cardset_path = 'db/csv/yugioh/cards_cardsets.csv'
@@ -63,22 +58,23 @@ csv.each do |row|
   set = YugiohSet.find_by(set_id: row['set_id'].to_i)
 
   next unless card.present? && set.present?
-    existing_record = YugiohCardSet.find_by(yugioh_card_id: card.id, yugioh_set_id: set.id)
-    next if existing_record.present?
-      cardset = YugiohCardSet.create(
-        yugioh_card_id: card.id,
-        yugioh_set_id: set.id,
-        set_rarity: row['set_rarity'],
-        set_code: row['set_rarity_code']
-      )
+
+  existing_record = YugiohCardSet.find_by(yugioh_card_id: card.id, yugioh_set_id: set.id)
+  next if existing_record.present?
+
+  cardset = YugiohCardSet.create(
+    yugioh_card_id: card.id,
+    yugioh_set_id: set.id,
+    set_rarity: row['set_rarity'],
+    set_code: row['set_rarity_code']
+  )
 end
 puts 'Finished Seeding joiner table.'
-
 
 puts 'Updating joiner table and reprints'
 all = YugiohCard.all
 all.each do |card|
-  if(card.yugioh_card_sets.present?)
+  if card.yugioh_card_sets.present?
     card.yugioh_card_sets.each do |cs|
       new_card = YugiohCard.create(
         name: cs.yugioh_card.name,
@@ -90,32 +86,74 @@ all.each do |card|
         atk: cs.yugioh_card.atk,
         def: cs.yugioh_card.def,
         image: cs.yugioh_card.image
-        )
-          
-        new_card_set = YugiohCardSet.create(
-          yugioh_card_id: new_card.id,
-          yugioh_set_id: cs.yugioh_set_id,
-          set_rarity: cs.set_rarity,
-          set_code: cs.set_code
-        )
-        end
-      else
-        new_card = YugiohCard.create(
-          name: card.name,
-          card_type: card.card_type,
-          level: card.level,
-          attribute_of_card: card.attribute_of_card,
-          archetype: card.archetype,
-          description_of_card: card.description_of_card,
-          atk: card.atk,
-          def: card.def,
-          image: card.image
-        )
+      )
+
+      new_card_set = YugiohCardSet.create(
+        yugioh_card_id: new_card.id,
+        yugioh_set_id: cs.yugioh_set_id,
+        set_rarity: cs.set_rarity,
+        set_code: cs.set_code
+      )
     end
+  else
+    new_card = YugiohCard.create(
+      name: card.name,
+      card_type: card.card_type,
+      level: card.level,
+      attribute_of_card: card.attribute_of_card,
+      archetype: card.archetype,
+      description_of_card: card.description_of_card,
+      atk: card.atk,
+      def: card.def,
+      image: card.image
+    )
+  end
 end
 
-puts "Deleting old card data"
+puts 'Deleting old card data'
 YugiohCardSet.where(yugioh_card_id: YugiohCard.where.not(card_id: nil)).destroy_all
 YugiohCard.where.not(card_id: nil).destroy_all
+puts 'Done.'
 
-puts "Done."
+private def get_y_card_price(rarity)
+  case rarity
+  when 'Common'
+    rand(1..7)
+  when 'Rare'
+    rand(10..33)
+  when 'Super Rare'
+    rand(20..70)
+  when 'Ultra Rare'
+    rand(33..400)
+  else
+    rand(300..150_000)
+  end
+end
+
+private def calculate_sale_price(price)
+  return price unless rand <= 0.2
+
+  (price * 0.75).round
+end
+
+puts 'Creating Yugioh Products'
+all_y_cards = YugiohCard.limit(50)
+all_y_cards.each do |card|
+  price = if card.yugioh_card_sets.any?
+            get_y_card_price(card.yugioh_card_sets.first.set_rarity)
+          else
+            get_y_card_price('Common')
+          end
+  category = Category.find_or_create_by(name: 'Yugioh')
+  Product.create!(
+    category:,
+    price_cents: price,
+    sale_price_cents: calculate_sale_price(price),
+    image_url: card.image,
+    stock: rand(0..100),
+    product_name: card.name,
+    brand: 'Konami',
+    productable: card
+  )
+end
+puts 'Done Yugioh Card Products'
