@@ -1,6 +1,6 @@
 class YugiohController < ApplicationController
     def index
-      @yugioh_cards = YugiohCard.limit(60)
+      @yugioh_cards = YugiohCard.limit(20)
     end
 
     def search
