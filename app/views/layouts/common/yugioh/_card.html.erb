@@ -20,9 +20,15 @@
         <% else %>
             <p class="text-sm font-sm"><%=number_to_currency(product.price_cents / 100.0)%></p>
         <% end %>
+        <% if product.stock < 8 %>
         <p class="text-sm font-sm">
-            Stock: <%= product.stock %>
+            Low Stock: <%= product.stock %>
         </p>
+        <% else %>
+        <p class="text-sm font-sm">
+            Stock: 20+
+        </p>
+        <% end %>
     </div>
   </div>
 <%end%>
