@@ -1,0 +1,20 @@
+<div class="shadow-lg flex flex-row">
+  <%= image_tag product.image_url, alt:"Yugioh Image", width: "80", height: "120", class:'overflow-hidden'%>
+  <div class="p-6">
+    <p class="text-sm font-sm">
+        <%= product.product_name %>
+        </p>
+    <p>
+      <% if (product.productable.yugioh_card_sets.present?) %>
+      <%= product.productable.yugioh_sets.first.set_name %> | 
+      <%= product.productable.yugioh_card_sets.first.set_rarity %>   
+      <% end %>
+    </p>
+    <p class="text-sm font-sm">
+       <%= number_to_currency(product.sale_price_cents / 100.0) %>
+    </p>
+    <p class="text-sm font-sm">
+        Market Price: <%= number_to_currency(product.price_cents / 100.0) %>
+    </p>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+<h1>Products on Sale</h1>
+<div class="flex flex-row justify-center">
+    <ul class="flex-1">
+        <% @products_on_sale.each do |p| %>
+        <li>
+            <%= render partial: 'layouts/common/yugioh/card', locals:{product: p} %>
+        </li>
+        <% end %>
+    </ul>
+    <ul class="flex-1">
+        <% @products_on_sale.each do |p| %>
+        <li>
+            <%= render partial: 'layouts/common/yugioh/card', locals:{product: p} %>
+        </li>
+        <% end %>
+    </ul>
+</div>
