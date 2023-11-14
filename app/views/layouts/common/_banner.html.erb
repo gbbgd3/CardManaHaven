@@ -1,16 +1,16 @@
 <% if controller_name == 'home' && action_name == 'index' %>
 <section class="relative py-24 px-4">
   <div class="z-20 relative text-white container mx-auto">
-    <h1 class="mb-4">Tailwind Banner with Object Fit Image</h1>
-    <p class="leading-normal">This is a banner that can be resized to your heart’s content without using a background image property.</p>
-    <p class="leading-normal">Integer eu massa ipsum. Quisque dui purus, congue in urna sed, volutpat condimentum nisi. Ut elementum tellus quam, sit amet congue ante tempus id. Phasellus ultricies enim in est posuere, quis semper urna consequat.</p>
-    <a href="#" class="inline-block bg-blue-500 text-white no-underline hover:bg-blue-800 mt-4 p-4 rounded">A Call to Action</a>
+    <h1 class="text-4xl font-bold mb-4">Tailwind  with Object Fit Image</h1>
+    <p class="text-lg">Explore our diverse collection of high-quality products. From trading cards to accessories, we have something for every enthusiast.</p>
+    <p class="text-lg mb-8">Check out our latest products and elevate your experience!</p>
+    <a href="/search" class="inline-block bg-blue-500 text-white no-underline hover:bg-blue-800 mt-4 p-4 rounded">View Products</a>
   </div>
   <div class="absolute inset-0 h-auto z-10">
-  <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-  <div class="absolute inset-0 bg-gradient-to-b from-black via-transparent to-transparent"></div>
-  <div class="absolute inset-0 bg-gradient-to-r from-black via-transparent to-transparent"></div>
-  <div class="absolute inset-0 bg-gradient-to-l from-black via-transparent to-transparent"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-black via-transparent to-transparent"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-black via-transparent to-transparent"></div>
+      <div class="absolute inset-0 bg-black opacity-20"></div>
       <%= image_tag('home/CMH_Banner.png', alt:'image', class:'w-full h-full object-cover')%>
   </div>
 </section>
