@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "home#index"
-  get "yugioh", to: 'yugioh#index'
+  get "/yugioh_card/:id", to: 'yugioh#show', as: :yugioh_card
   get "/search", to: 'product#search'
   get "/yugioh/search", to: 'yugioh#search'
 end

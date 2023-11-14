@@ -5,4 +5,8 @@ class YugiohController < ApplicationController
 
     def search
     end
+
+    def show
+      @card = YugiohCard.find_by(id: params[:id])
+    end
 end
