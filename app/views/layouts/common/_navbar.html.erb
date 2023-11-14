@@ -12,14 +12,14 @@
     </ul>
 
     <div class="flex">
-        <form action='products/search' method='get' class='flex'>
+        <form action='/search' method='get' class='flex'>
         <select
           class="rounded-md bg-white inline border border-slate-300 py-2 pl-4 pr-8 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
           name="category"
         >
           <option value='0' selected >Any</option>
         <% Category.all.each do |category| %>
-          <option value=<%= category.id %> selected ><%= category.name %></option>
+          <option value=<%= category.id %> ><%= category.name %></option>
         <% end %>
         </select>
       <input
