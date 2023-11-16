@@ -9,6 +9,8 @@
 #   end
 
 require 'csv'
+require 'net/http'
+require 'json'
 
 YugiohCardSet.destroy_all
 Category.destroy_all
@@ -157,3 +159,30 @@ all_y_cards.each do |card|
   )
 end
 puts 'Done Yugioh Card Products'
+
+def fetch_data(url)
+  uri = URI(url)
+  response = Net::HTTP.get_response(uri)
+
+  if response.is_a?(Net::HTTPSuccess)
+    JSON.parse(response.body)
+  else
+    puts "Error fetching data: #{response.code} - #{response.message}"
+    nil
+  end
+end
+
+puts "Seeding Magic cards"
+sets_base = fetch_data('https://api.scryfall.com/sets')
+sets = []
+n = 0
+
+sets_base['data'].each do |set|
+  unless n >= 50 && n <= 55
+    sets.push(set['scryfall_uri'])
+  end
+
+  n += 1
+
+  break if n > 55
+end
