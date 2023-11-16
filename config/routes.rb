@@ -7,8 +7,15 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "home#index"
-  get "/categories", to: 'categories#index'
-  get "/yugioh_card/:id", to: 'yugioh#show', as: :yugioh_card
   get "/search", to: 'product#search'
+  get "/categories", to: 'categories#index'
+
+  get "/yugioh_card/:id", to: 'yugioh#show', as: :yugioh_card
   get "/yugioh/search", to: 'yugioh#search'
+
+  get "/magic-the-gathering/:id", to: 'mtg#show', as: :mtg_card
+
+  get '/products', to: 'product#index'
+  get '/products/:id', to: 'prodcut#show', as: :product
+  get '/prodcuts/search', to: 'product#search'
 end
