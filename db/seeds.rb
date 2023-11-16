@@ -217,7 +217,7 @@ def generate_price_in_cents
   cumulative_probability = 0
   probabilities.each do |price_range, probability|
     cumulative_probability += probability
-    return convert_price_range_to_cents(price_range) if random_number <= cumulative_probability
+    return convert_price_range_to_cents(price_range).round if random_number <= cumulative_probability
   end
   return 4
 end
@@ -226,7 +226,7 @@ end
 def convert_price_range_to_cents(price_range)
   case price_range
   when :over_50
-    rand(5000..10_000)
+    rand(5000..10000)
   when :twenty_to_50
     rand(2000..5000)
   when :ten_to_20
@@ -251,12 +251,9 @@ begin
       artist = Artist.find_or_create_by(name: card['artist'])
       image = card.dig('image_uris', 'png')
       card_face_obj = []
-      price = card['prices'].compact.max
-      price *= 100 unless price.nil?
-
+      price = card['prices'].values.compact.max
+      price = (price.to_f * 100).round unless price.nil?
       price = generate_price_in_cents if price.nil?
-      puts 'THE PRICEIS => ' + price.to_s
-
       next if mtg_set.nil?
 
       if card.key?('card_faces')
@@ -288,9 +285,20 @@ begin
         power: card['power']&.to_i,
         toughness: card['toughness']&.to_i,
         m_set: mtg_set,
-        image:,
-        price:
+        image:
       )
+
+        category = Category.find_or_create_by(name: 'Magic The Gathering')
+        Product.create!(
+          category:,
+          price_cents: price,
+          sale_price_cents: calculate_sale_price(price),
+          image_url: image,
+          stock: rand(0..100),
+          product_name: card['name'],
+          brand: 'Wizards of the Coast',
+          productable: mtg_card
+        )
 
       next if card_face_obj.nil?
 
@@ -303,23 +311,4 @@ begin
 rescue StandardError => e
   puts "An error occurred: #{e.message}"
   puts e.backtrace.join("\n")
-end
-puts "Magic cards done\n"
-
-puts 'Seeding Magic Products'
-@magic_cards = Mtg.all
-@magic_cards.take(55).each do |mc|
-  price = mc.price
-  puts "This shouldn't be null " + price.to_s
-  category = Category.find_or_create_by(name: 'Magic The Gathering')
-  Product.create!(
-    category:,
-    price_cents: price,
-    sale_price_cents: calculate_sale_price(price),
-    image_url: mc.image,
-    stock: rand(0..100),
-    product_name: mc.name,
-    brand: 'Wizards of the Coast',
-    productable: mc
-  )
 end
