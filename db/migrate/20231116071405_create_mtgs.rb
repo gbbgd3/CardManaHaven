@@ -10,9 +10,8 @@ class CreateMtgs < ActiveRecord::Migration[7.1]
       t.string :layout
       t.integer :power
       t.string :toughness
-      t.references :set, null: false, foreign_key: true
+      t.references :m_set, null: false, foreign_key: true
       t.string :image
-      t.references :mcf, null: false, foreign_key: true
 
       t.timestamps
     end

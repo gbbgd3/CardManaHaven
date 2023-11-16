@@ -10,11 +10,66 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_13_114820) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_16_092218) do
+  create_table "artists", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "card_faces", force: :cascade do |t|
+    t.string "name"
+    t.string "mana"
+    t.string "type_line"
+    t.string "oracle_text"
+    t.integer "power"
+    t.integer "toughness"
+    t.string "image"
+    t.string "flavour_text"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "categories", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "m_sets", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.date "release_date"
+    t.integer "card_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "mcfs", force: :cascade do |t|
+    t.integer "mtg_id", null: false
+    t.integer "card_face_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["card_face_id"], name: "index_mcfs_on_card_face_id"
+    t.index ["mtg_id"], name: "index_mcfs_on_mtg_id"
+  end
+
+  create_table "mtgs", force: :cascade do |t|
+    t.string "name"
+    t.string "mana"
+    t.string "type_line"
+    t.string "oracle_text"
+    t.string "flavour_text"
+    t.integer "artist_id", null: false
+    t.string "layout"
+    t.integer "power"
+    t.string "toughness"
+    t.integer "m_set_id", null: false
+    t.string "image"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["artist_id"], name: "index_mtgs_on_artist_id"
+    t.index ["m_set_id"], name: "index_mtgs_on_m_set_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -70,6 +125,10 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_13_114820) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "mcfs", "card_faces"
+  add_foreign_key "mcfs", "mtgs"
+  add_foreign_key "mtgs", "artists"
+  add_foreign_key "mtgs", "m_sets"
   add_foreign_key "yugioh_card_sets", "yugioh_cards"
   add_foreign_key "yugioh_card_sets", "yugioh_sets"
 end

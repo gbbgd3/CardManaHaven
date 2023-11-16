@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  mana: MyString
+  type_line: MyString
+  oracle_text: MyString
+  power: 1
+  toughness: 1
+  image: MyString
+  flavour_text: MyString
+
+two:
+  name: MyString
+  mana: MyString
+  type_line: MyString
+  oracle_text: MyString
+  power: 1
+  toughness: 1
+  image: MyString
+  flavour_text: MyString

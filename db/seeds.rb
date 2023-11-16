@@ -12,11 +12,16 @@ require 'csv'
 require 'net/http'
 require 'json'
 
-YugiohCardSet.destroy_all
+Product.destroy_all
 Category.destroy_all
+YugiohCardSet.destroy_all
 YugiohCard.destroy_all
 YugiohSet.destroy_all
-Product.destroy_all
+Mtg.destroy_all
+MSet.destroy_all
+Mcf.destroy_all
+CardFace.destroy_all
+Artist.destroy_all
 
 yugioh_card_path    = 'db/csv/yugioh/cards.csv'
 yugioh_cardset_path = 'db/csv/yugioh/cards_cardsets.csv'
@@ -167,22 +172,85 @@ def fetch_data(url)
   if response.is_a?(Net::HTTPSuccess)
     JSON.parse(response.body)
   else
-    puts "Error fetching data: #{response.code} - #{response.message}"
+    puts "Error fetching data: #{uri} \n ---------- \n #{response.code} - #{response.message}"
     nil
   end
 end
 
-puts "Seeding Magic cards"
+puts 'Seeding Magic Sets'
 sets_base = fetch_data('https://api.scryfall.com/sets')
-sets = []
+card_urls = []
 n = 0
 
 sets_base['data'].each do |set|
   unless n >= 50 && n <= 55
-    sets.push(set['scryfall_uri'])
+    card_urls.push(set['search_uri'])
+    MSet.create(
+      name: set['name'],
+      code: set['code'],
+      release_date: set['released_at'],
+      card_count: set['card_count']
+    )
   end
 
   n += 1
 
   break if n > 55
 end
+
+begin
+puts 'Creating and seeding Cards'
+card_urls.each do |url|
+  cards = fetch_data(url)
+  cards['data'].each do |card|
+    mtg_set = MSet.find_by(name: card['set_name'])
+    artist = Artist.find_or_create_by(name: card['artist'])
+    image = card.dig('image_uris', 'png')
+    card_face_obj = []
+
+    next if mtg_set.nil?
+    if(card.key?('card_faces'))
+      card_faces = card['card_faces']
+      card_faces.each do |cf|
+        cf_image = cf.dig('image_uris', 'png')
+        cf_record = CardFace.create(
+          name: card['name'],
+          mana: card['mana_cost'],
+          type_line: card['type_line'],
+          oracle_text: card['oracle_text'],
+          flavour_text: card['flavor_text'],
+          power: card['power']&.to_i,
+          toughness: card['toughness']&.to_i,
+          image: cf_image
+        )
+        card_face_obj.push(cf_record)
+      end
+    end
+
+    mtg_card = Mtg.create(
+      name: card['name'],
+      mana: card['mana_cost'],
+      type_line: card['type_line'],
+      oracle_text: card['oracle_text'],
+      flavour_text: card['flavor_text'],
+      artist:,
+      layout: card['layout'],
+      power: card['power']&.to_i,
+      toughness: card['toughness']&.to_i,
+      m_set: mtg_set,
+      image: image
+    )
+
+    if(!card_face_obj.nil?)
+      card_face_obj.each do |cf|
+        mtg_card.card_faces << cf
+      end
+    end
+  end
+  sleep(0.1)
+end
+rescue => e
+  puts "An error occurred: #{e.message}"
+  puts e.backtrace.join("\n")
+end
+puts "Completed\n"
