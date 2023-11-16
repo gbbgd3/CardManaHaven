@@ -1,11 +1,9 @@
 class ProductController < ApplicationController
-
-  def index 
-    @products = Product.all.limit()
+  def index
+    @products = Product.page(params[:page]).per(30)
   end
 
-
-
+  def show; end
 
   def search
     category_id = params[:category].to_i

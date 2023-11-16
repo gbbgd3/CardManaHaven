@@ -219,14 +219,13 @@ def generate_price_in_cents
     cumulative_probability += probability
     return convert_price_range_to_cents(price_range).round if random_number <= cumulative_probability
   end
-  return 4
+  4
 end
-
 
 def convert_price_range_to_cents(price_range)
   case price_range
   when :over_50
-    rand(5000..10000)
+    rand(5000..10_000)
   when :twenty_to_50
     rand(2000..5000)
   when :ten_to_20
@@ -288,17 +287,17 @@ begin
         image:
       )
 
-        category = Category.find_or_create_by(name: 'Magic The Gathering')
-        Product.create!(
-          category:,
-          price_cents: price,
-          sale_price_cents: calculate_sale_price(price),
-          image_url: image,
-          stock: rand(0..100),
-          product_name: card['name'],
-          brand: 'Wizards of the Coast',
-          productable: mtg_card
-        )
+      category = Category.find_or_create_by(name: 'Magic The Gathering')
+      Product.create!(
+        category:,
+        price_cents: price,
+        sale_price_cents: calculate_sale_price(price),
+        image_url: image,
+        stock: rand(0..100),
+        product_name: card['name'],
+        brand: 'Wizards of the Coast',
+        productable: mtg_card
+      )
 
       next if card_face_obj.nil?
 

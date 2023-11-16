@@ -16,6 +16,6 @@ Rails.application.routes.draw do
   get "/magic-the-gathering/:id", to: 'mtg#show', as: :mtg_card
 
   get '/products', to: 'product#index'
-  get '/products/:id', to: 'prodcut#show', as: :product
+  get '/products/:id', to: 'product#show', as: :products_show
   get '/prodcuts/search', to: 'product#search'
 end
