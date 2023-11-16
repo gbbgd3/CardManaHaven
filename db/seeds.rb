@@ -198,59 +198,128 @@ sets_base['data'].each do |set|
   break if n > 55
 end
 
+def generate_price_in_cents
+  probabilities = {
+    over_50: 1,
+    twenty_to_50: 4,
+    ten_to_20: 5,
+    four_to_10: 25,
+    one_to_4: 55,
+    under_one: 10
+  }
+
+  total_probability = probabilities.values.sum
+
+  return 4 if total_probability.zero?
+
+  random_number = rand(1..total_probability)
+
+  cumulative_probability = 0
+  probabilities.each do |price_range, probability|
+    cumulative_probability += probability
+    return convert_price_range_to_cents(price_range) if random_number <= cumulative_probability
+  end
+  return 4
+end
+
+
+def convert_price_range_to_cents(price_range)
+  case price_range
+  when :over_50
+    rand(5000..10_000)
+  when :twenty_to_50
+    rand(2000..5000)
+  when :ten_to_20
+    rand(1000..2000)
+  when :four_to_10
+    rand(400..1000)
+  when :one_to_4
+    rand(100..400)
+  when :under_one
+    rand(1..100)
+  else
+    rand(1..1000)
+  end
+end
+
 begin
-puts 'Creating and seeding Cards'
-card_urls.each do |url|
-  cards = fetch_data(url)
-  cards['data'].each do |card|
-    mtg_set = MSet.find_by(name: card['set_name'])
-    artist = Artist.find_or_create_by(name: card['artist'])
-    image = card.dig('image_uris', 'png')
-    card_face_obj = []
+  puts 'Creating and seeding Cards'
+  card_urls.each do |url|
+    cards = fetch_data(url)
+    cards['data'].each do |card|
+      mtg_set = MSet.find_by(name: card['set_name'])
+      artist = Artist.find_or_create_by(name: card['artist'])
+      image = card.dig('image_uris', 'png')
+      card_face_obj = []
+      price = card['prices'].compact.max
+      price *= 100 unless price.nil?
 
-    next if mtg_set.nil?
-    if(card.key?('card_faces'))
-      card_faces = card['card_faces']
-      card_faces.each do |cf|
-        cf_image = cf.dig('image_uris', 'png')
-        cf_record = CardFace.create(
-          name: card['name'],
-          mana: card['mana_cost'],
-          type_line: card['type_line'],
-          oracle_text: card['oracle_text'],
-          flavour_text: card['flavor_text'],
-          power: card['power']&.to_i,
-          toughness: card['toughness']&.to_i,
-          image: cf_image
-        )
-        card_face_obj.push(cf_record)
+      price = generate_price_in_cents if price.nil?
+      puts 'THE PRICEIS => ' + price.to_s
+
+      next if mtg_set.nil?
+
+      if card.key?('card_faces')
+        card_faces = card['card_faces']
+        card_faces.each do |cf|
+          cf_image = cf.dig('image_uris', 'png')
+          cf_record = CardFace.create(
+            name: card['name'],
+            mana: card['mana_cost'],
+            type_line: card['type_line'],
+            oracle_text: card['oracle_text'],
+            flavour_text: card['flavor_text'],
+            power: card['power']&.to_i,
+            toughness: card['toughness']&.to_i,
+            image: cf_image
+          )
+          card_face_obj.push(cf_record)
+        end
       end
-    end
 
-    mtg_card = Mtg.create(
-      name: card['name'],
-      mana: card['mana_cost'],
-      type_line: card['type_line'],
-      oracle_text: card['oracle_text'],
-      flavour_text: card['flavor_text'],
-      artist:,
-      layout: card['layout'],
-      power: card['power']&.to_i,
-      toughness: card['toughness']&.to_i,
-      m_set: mtg_set,
-      image: image
-    )
+      mtg_card = Mtg.create(
+        name: card['name'],
+        mana: card['mana_cost'],
+        type_line: card['type_line'],
+        oracle_text: card['oracle_text'],
+        flavour_text: card['flavor_text'],
+        artist:,
+        layout: card['layout'],
+        power: card['power']&.to_i,
+        toughness: card['toughness']&.to_i,
+        m_set: mtg_set,
+        image:,
+        price:
+      )
 
-    if(!card_face_obj.nil?)
+      next if card_face_obj.nil?
+
       card_face_obj.each do |cf|
         mtg_card.card_faces << cf
       end
     end
+    sleep(0.1)
   end
-  sleep(0.1)
-end
-rescue => e
+rescue StandardError => e
   puts "An error occurred: #{e.message}"
   puts e.backtrace.join("\n")
 end
-puts "Completed\n"
+puts "Magic cards done\n"
+
+puts 'Seeding Magic Products'
+@magic_cards = Mtg.all
+@magic_cards.take(55).each do |mc|
+  price = mc.price
+  puts "This shouldn't be null " + price.to_s
+  category = Category.find_or_create_by(name: 'Magic The Gathering')
+  Product.create!(
+    category:,
+    price_cents: price,
+    sale_price_cents: calculate_sale_price(price),
+    image_url: mc.image,
+    stock: rand(0..100),
+    product_name: mc.name,
+    brand: 'Wizards of the Coast',
+    productable: mc
+  )
+end

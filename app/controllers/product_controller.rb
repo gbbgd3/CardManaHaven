@@ -1,4 +1,12 @@
 class ProductController < ApplicationController
+
+  def index 
+    @products = Product.all.limit()
+  end
+
+
+
+
   def search
     category_id = params[:category].to_i
     if category_id.zero?
