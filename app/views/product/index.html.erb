@@ -1,12 +1,12 @@
-<div class="flex flex-row justify-center pagination p-4 m-2">
+<div class="flex flex-row justify-center content-stretch pagination m-4">
   <%= paginate @products %>
 </div>
-<div class="grid grid-cols-6 gap-4">
+<div class="w-full flex flex-row flex-wrap gap-4">
   <% @products.each do |product| %>
   <%= link_to products_show_path(product.id) do %>
-    <div class="max-w-sm bg-white rounded overflow-hidden shadow-lg">
+    <div class="flex-basis-0 flex-col max-w-sm bg-white rounded overflow-hidden shadow-lg p-2">
       <%= image_tag product.image_url, alt: "Yugioh Image", class: "w-full h-48 object-contain"%>
-      <div class="px-6 py-4">
+      <div class="px-2 py-2">
         <div class="font-bold text-sm">
           <%= product.product_name %>
         </div>
