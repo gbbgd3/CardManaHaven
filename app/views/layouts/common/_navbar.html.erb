@@ -3,12 +3,10 @@
     <%= link_to 'Card Magic Heaven', root_path, class:"text-white text-2xl font-bold"%>
     <ul class="flex justify-around space-x-4">
         <li><a href="/" class="text-white hover:text-blue-700 text-lg hover:underline">Home</a></li>
-        <li><a href="#" class="text-white hover:text-blue-700 text-lg hover:underline">Products</a></li>
-        <% Category.all.each do |category| %>
-            <%= link_to category.name, root_path, class:"text-white hover:text-blue-700 text-lg hover:underline"%>
-        <% end %>
-        <li><a href="#" class="text-white hover:text-blue-700 text-lg hover:underline">Categories</a></li>
-        <li><a href="#" class="text-white hover:text-blue-700 text-lg hover:underline">About</a></li>
+        <li><a href="/products" class="text-white hover:text-blue-700 text-lg hover:underline">Products</a></li>
+        <li><a href="/magic-the-gathering" class="text-white hover:text-blue-700 text-lg hover:underline">Magic The Gathering</a></li>
+        <li><a href="/yugioh" class="text-white hover:text-blue-700 text-lg hover:underline">Yugioh</a></li>
+        <li><a href="/categories" class="text-white hover:text-blue-700 text-lg hover:underline">Categories</a></li>
     </ul>
 
     <div class="flex">
