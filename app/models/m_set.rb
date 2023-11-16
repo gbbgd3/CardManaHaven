@@ -1,0 +1,2 @@
+class MSet < ApplicationRecord
+end
