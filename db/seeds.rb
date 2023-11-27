@@ -311,3 +311,4 @@ rescue StandardError => e
   puts "An error occurred: #{e.message}"
   puts e.backtrace.join("\n")
 end
+AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
