@@ -9,12 +9,16 @@ Rails.application.routes.draw do
   root "home#index"
   get "/categories", to: 'categories#index'
 
-  get "/yugioh_card/:id", to: 'yugioh#show', as: :yugioh_card
-  get "/yugioh/search", to: 'yugioh#search'
+  get "/search", to: "search#search_redirect", as: :search
 
-  get "/magic-the-gathering/:id", to: 'mtg#show', as: :mtg_card
+  get "products/yugioh", to: "yugioh#index"
+  get "products/yugioh/card/:id", to: 'yugioh#show', as: :yugioh_card
+  get "products/yugioh/search(/:search)", to: 'yugioh#search', as: :yugioh_search
+  
+  get "products/magic-the-gathering", to: "mtg#index"
+  get "products/magic-the-gathering/search(/:search)", to: "mtg#search", as: :magic_the_gathering_search
 
   get '/products', to: 'product#index'
-  get '/products/:id', to: 'product#show', as: :products_show
-  get '/prodcuts/search', to: 'product#search'
+  get '/products/product/:id', to: 'product#show', as: :products_show
+  get '/products/search(/:search)', to: 'product#search', as: :products_search
 end
