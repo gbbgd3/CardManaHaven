@@ -14,7 +14,18 @@ ActiveAdmin.register Product do
       f.input :product_name
       f.input :brand
       f.input :productable_type, as: :select, collection: [YugiohCard.name, Mtg.name]
-      f.input :productable_id, as: :select, collection: YugiohCard.all.map { |card| [card.name, card.id] }    
+
+      current_productable_id = f.object.productable_id
+
+      productable_options = (YugiohCard.left_joins(:product).where(products: { id: nil }).to_a +
+      Mtg.left_joins(:product).where(products: { id: nil }).to_a)
+      .uniq.map { |card| [card.name, card.id] }
+
+      if current_productable_id.present?
+        productable_options << [f.object.productable.name, current_productable_id]
+      end
+
+      f.input :productable_id, as: :select, collection: productable_options
     end
     f.actions
   end
