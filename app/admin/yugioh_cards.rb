@@ -14,5 +14,19 @@ ActiveAdmin.register YugiohCard do
   #   permitted << :other if params[:action] == 'create' && current_user.admin?
   #   permitted
   # end
-  
+  form do |f|
+    f.inputs 'YugiohCard Details' do
+      f.input :name
+      f.input :card_type
+      f.input :level
+      f.input :attribute_of_card
+      f.input :archetype
+      f.input :description_of_card
+      f.input :atk
+      f.input :def
+      f.input :image
+      f.input :yugioh_sets, as: :select, input_html: { multiple: true }, collection: YugiohSet.all.map { |set| [set.set_name, set.id] }
+    end
+    f.actions
+  end
 end
