@@ -183,7 +183,7 @@ card_urls = []
 n = 0
 
 sets_base['data'].each do |set|
-  unless n >= 50 && n <= 55
+  unless n >= 50 && n <= 51
     card_urls.push(set['search_uri'])
     MSet.create(
       name: set['name'],
@@ -195,7 +195,7 @@ sets_base['data'].each do |set|
 
   n += 1
 
-  break if n > 55
+  break if n > 51
 end
 
 def generate_price_in_cents

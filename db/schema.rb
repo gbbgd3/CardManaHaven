@@ -140,7 +140,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_27_115519) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["productable_type", "productable_id"], name: "index_products_on_productable"
-    t.index ["productable_type", "productable_id"], name: "product_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|
