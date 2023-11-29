@@ -16,17 +16,18 @@
       <% if product.image.attached? %>
       <%= image_tag product.image, alt: 'Card Image main', class: 'mb-4', style: 'max-width: 300px;' %>
       <% elsif product.image_url.present? %>
-        <%= image_tag product.image_url, alt: 'Card Image from url', class: 'mb-4', style: 'max-width: 300px;' %>
-        <% elsif product.productable.present? && product.productable.name == 'Mtg' %>
+        <%= image_tag product.image_url, alt: 'Card Image from', class: 'mb-4', style: 'max-width: 300px;' %>
+        <% elsif product.productable.present? && product.productable.class.name == Mtg.name.to_s %>
             <% if product.productable.present? && product.productable.card_faces&.exists? %>
               <% product.productable.card_faces.each do |cf| %>
                 <% if cf.image? %>
-                <%= image_tag cf.image, alt: 'Card Image cf', class: 'mb-4', style: 'max-width: 300px;' %>
+                <%= image_tag cf.image, alt: 'Card Image', class: 'mb-4', style: 'max-width: 300px;' %>
                 <% break %>
               <% end %>
             <% end %>
           <% end %>
       <% else %>
+      <% puts product.productable.name %>
         <%= image_tag 'no_img.png', alt: 'Default Card Image', class: 'mb-4', style: 'max-width: 300px;' %>
       <% end %>
       <div class="px-2 py-2">
