@@ -14,10 +14,10 @@
           <%= product.brand %>
         </p>
         <% if product.sale_price_cents < product.price_cents %>
-          <p class="text-sm font-sm"><%= number_to_currency(product.sale_price_cents / 100.0) %></p>
-          <p class="text-sm font-sm">Market Price: <%= number_to_currency(product.price_cents / 100.0) %></p>
+          <p class="text-sm font-sm">Our Price: <%= number_to_currency(product.sale_price_cents / 100.0) %></p>
+          <p class="text-sm font-sm text-decoration: line-through">Market Price: <%= number_to_currency(product.price_cents / 100.0) %></p>
         <% else %>
-          <p class="text-sm font-sm"><%= number_to_currency(product.price_cents / 100.0) %></p>
+          <p class="text-sm font-sm">Market Price: <%= number_to_currency(product.price_cents / 100.0) %></p>
         <% end %>
         <% if product.stock < 8 %>
           <p class="text-sm font-sm">Low Stock: <%= product.stock %></p>
