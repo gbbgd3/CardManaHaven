@@ -29,4 +29,23 @@ ActiveAdmin.register Product do
     end
     f.actions
   end
+
+
+  show do
+    attributes_table do
+      row :category
+      row :price_cents
+      row :sale_price_cents
+      row :product_detail
+      row :image do |product|
+        image_tag(product.image, width: '100px') if product.image.present?
+      end
+      row :stock
+      row :product_name
+      row :brand
+      row :productable
+    end
+
+    active_admin_comments
+  end
 end
