@@ -12,7 +12,6 @@ ActiveAdmin.register YugiohCard do
       row :description_of_card
       row :atk
       row :def
-      row :image
       row :product
     end
 

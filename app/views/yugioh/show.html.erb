@@ -1,7 +1,7 @@
 <div class="flex my-4">
   <div class="flex-shrink-0">
     <% if @yugioh_card.product.image.attached? %>
-      <%= image_tag @yugioh_card.image, alt: 'Card Image', class: 'mb-4', style: 'max-width: 300px;' %>
+      <%= image_tag @yugioh_card.product.image, alt: 'Card Image', class: 'mb-4', style: 'max-width: 300px;' %>
     <% elsif @yugioh_card.image.is_a?(String) || !@yugioh_card.image.nil? %>
       <%= image_tag @yugioh_card.image, alt: 'Card Image', class: 'mb-4', style: 'max-width: 300px;' %>
     <% else %>
