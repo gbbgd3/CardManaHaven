@@ -1,6 +1,6 @@
-<% if product.price_cents >= product.sale_price_cents %>
-  <p><strong>Price:</strong> <%= number_to_currency(product.price_cents / 100.0) %></p>
-<% else %>
-  <p><strong>Market Price:</strong> <%= number_to_currency(product.price_cents / 100.0) %></p>
+<% if product.price_cents > product.sale_price_cents %>
   <p><strong>Our Price:</strong> <%= number_to_currency(product.sale_price_cents / 100.0) %></p>
+  <p style="text-decoration: line-through;"><strong>Market Price:</strong> <%= number_to_currency(product.price_cents / 100.0) %></p>
+<% else %>
+  <p><strong>Price:</strong> <%= number_to_currency(product.price_cents / 100.0) %></p>
 <% end %>
