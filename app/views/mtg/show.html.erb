@@ -1,0 +1,51 @@
+<div class="flex my-4">
+  <div class="flex-shrink-0">
+    <% if @card.product.image.attached? %>
+      <%= image_tag @card.image, alt: 'Card Image', class: 'mb-4', style: 'max-width: 300px;' %>
+    <% elsif @card.image.is_a?(String) || !@card.image.nil? %>
+      <%= image_tag @card.image, alt: 'Card Image', class: 'mb-4', style: 'max-width: 300px;' %>
+      <% elsif @card.card_faces.exists? %>
+        <% @card.card_faces.each do |cf| %>
+        <% if cf.image? %>
+            <%= image_tag cf.image, alt: 'Card Image', class: 'mb-4', style: 'max-width: 300px;' %>
+        <% end %>
+        <% end %>
+    <% else %>
+      <%= image_tag 'no_img.png', alt: 'Default Card Image', class: 'mb-4', style: 'max-width: 300px;' %>
+    <% end %>
+  </div>
+  <div class="flex flex-col ml-4 flex-grow">
+    <h1 class="text-3xl font-bold mb-2 self-start">Product Detail</h1>
+    <h2 class="text-xl font-bold mb-2"><%= @card.name if @card.present? %></h1>
+    <% card_details = {
+          'Mana' => @card.mana,
+          'Type' => @card.type_line,
+          'Description' => @card.oracle_text,
+          'Power' => @card.power,
+          'Toughness' => @card.toughness,
+          'flavour_text' => @card.flavour_text,
+        } %>
+    <% card_details.each do |label, value| %>
+        <% next unless value.present? %>
+        <div class="mb-1">
+            <span class="font-semibold"><%= label %>:</span> <%= value %>
+        </div>
+    <% end %>
+    <% if @card.card_faces.exists? && !@card.layout == 'art_series' %>
+        <% @card.card_faces.each do |cf| %>
+        <%= cf.name %>
+        <%= cf.mana %>
+        <%= cf.type_line %>
+        <%= cf.oracle_text %>
+        <%= cf.power %>
+        <%= cf.toughness %>
+        <%= cf.flavour_text %>
+        <% end %>
+    <% end %>
+    <div class="mb-1">
+      <span class="font-semibold">Magic Set:</span> <%= @card.m_set.present? ? @card.m_set.name : 'No Associated Sets'%>
+    </div>
+    <%= render partial: 'layouts/common/product_details', locals: { product: @card.product } %>
+    </div>
+</div>
+

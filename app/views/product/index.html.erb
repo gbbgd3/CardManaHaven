@@ -9,6 +9,13 @@
       <%= image_tag product.image, alt: 'Card Image', class: 'mb-4', style: 'max-width: 300px;' %>
       <% elsif product.image_url.present? %>
         <%= image_tag product.image_url, alt: 'Card Image', class: 'mb-4', style: 'max-width: 300px;' %>
+        <% elsif product.productable.card_faces.exists? %>
+          <% product.productable.card_faces.each do |cf| %>
+            <% if cf.image? %>
+            <%= image_tag cf.image, alt: 'Card Image', class: 'mb-4', style: 'max-width: 300px;' %>
+            <% break %>
+            <% end %>
+          <% end %>
       <% else %>
         <%= image_tag 'no_img.png', alt: 'Default Card Image', class: 'mb-4', style: 'max-width: 300px;' %>
       <% end %>

@@ -1,6 +1,7 @@
 class MtgController < ApplicationController
     def show
-        @card = Mtg.find_by(id: params[:id])
+        @card = Product.find_by(id: params[:id])
+        @card = @card.productable
     end
 
     def search
