@@ -15,11 +15,13 @@ ActiveAdmin.register Mtg do
       f.input :artist
       f.input :m_set
       f.inputs 'Card Faces' do
-        f.has_many :card_faces, allow_destroy: true, new_record: 'Add Card Face' do |cf|
-          cf.input :name
+        if !f.object.persisted?
+          f.has_many :card_faces, new_record: 'Add Card Face' do |cf|
+            cf.input :name
+          end
         end
-        f.input :card_face_ids, as: :select, collection: CardFace.all.map { |cf| [cf.name, cf.id] }, input_html: { multiple: true, allow_blank: true }
-      end
+          f.input :card_face_ids, as: :check_boxes, collection: CardFace.all.map { |cf| [cf.name, cf.id] }, input_html: { multiple: true, allow_blank: true }
+        end
     end
     f.actions
   end
