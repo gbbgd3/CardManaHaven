@@ -4,8 +4,8 @@
     <ul class="flex justify-around space-x-4">
         <li><a href="/" class="text-white hover:text-blue-700 text-lg hover:underline">Home</a></li>
         <li><a href="/products" class="text-white hover:text-blue-700 text-lg hover:underline">Products</a></li>
-        <li><a href="/products/magic-the-gathering/search?category=2" class="text-white hover:text-blue-700 text-lg hover:underline">Magic The Gathering</a></li>
-        <li><a href="/products/yugioh/search?category=1" class="text-white hover:text-blue-700 text-lg hover:underline">Yugioh</a></li>
+        <li><a href="/products/magic-the-gathering/search?category=<%=Category.find_by(name: "Magic The Gathering").id%>" class="text-white hover:text-blue-700 text-lg hover:underline">Magic The Gathering</a></li>
+        <li><a href="/products/yugioh/search?category=<%=Category.find_by(name: "Yugioh").id%>" class="text-white hover:text-blue-700 text-lg hover:underline">Yugioh</a></li>
         <li><a href="/categories" class="text-white hover:text-blue-700 text-lg hover:underline">Categories</a></li>
     </ul>
 

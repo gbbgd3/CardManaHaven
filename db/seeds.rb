@@ -183,7 +183,7 @@ card_urls = []
 n = 0
 
 sets_base['data'].each do |set|
-  unless n >= 50 && n <= 51
+  unless n >= 60 && n <= 61
     card_urls.push(set['search_uri'])
     MSet.create(
       name: set['name'],
@@ -244,7 +244,15 @@ end
 begin
   puts 'Creating and seeding Cards'
   card_urls.each do |url|
+    if url == 'https://api.scryfall.com/cards/search?include_extras=true&include_variations=true&order=set&q=e%3Aylci&unique=prints'
+      puts "Skipping problematic URL: #{url}"
+      next
+    end
     cards = fetch_data(url)
+    if cards.nil? && !cards['data'].present?
+      puts "No data available for #{url}"
+      next
+    end
     cards['data'].each do |card|
       mtg_set = MSet.find_by(name: card['set_name'])
       artist = Artist.find_or_create_by(name: card['artist'])
@@ -311,4 +319,6 @@ rescue StandardError => e
   puts "An error occurred: #{e.message}"
   puts e.backtrace.join("\n")
 end
-AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
+if Rails.env.development? && AdminUser.count.zero?
+  AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password')
+end
