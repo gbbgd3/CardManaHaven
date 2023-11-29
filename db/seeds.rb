@@ -8,9 +8,9 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-require 'csv'
-require 'net/http'
-require 'json'
+require "csv"
+require "net/http"
+require "json"
 
 Product.destroy_all
 Category.destroy_all
@@ -23,46 +23,46 @@ Mcf.destroy_all
 CardFace.destroy_all
 Artist.destroy_all
 
-yugioh_card_path    = 'db/csv/yugioh/cards.csv'
-yugioh_cardset_path = 'db/csv/yugioh/cards_cardsets.csv'
-yugioh_set_path     = 'db/csv/yugioh/cardsets.csv'
+yugioh_card_path    = "db/csv/yugioh/cards.csv"
+yugioh_cardset_path = "db/csv/yugioh/cards_cardsets.csv"
+yugioh_set_path     = "db/csv/yugioh/cardsets.csv"
 
 csv = CSV.foreach(yugioh_set_path, headers: true).take(100)
 
 puts "Creating #{csv.length} Yugioh Sets..."
 csv.each do |r|
   YugiohSet.create(
-    set_id: r['id'],
-    set_name: r['set_name'],
-    set_code: r['set_code'],
-    release_date: r['tcg_date']
+    set_id:       r["id"],
+    set_name:     r["set_name"],
+    set_code:     r["set_code"],
+    release_date: r["tcg_date"]
   )
 end
-puts 'Yugioh Sets seeded successfully.'
+puts "Yugioh Sets seeded successfully."
 
-puts 'Creating Yugioh Cards Table...'
+puts "Creating Yugioh Cards Table..."
 card_data = CSV.foreach(yugioh_card_path, headers: true).take(1000)
 card_data.each do |row|
   YugiohCard.create(
-    name: row['name'],
-    card_type: row['type'],
-    atk: row['atk'],
-    def: row['def'],
-    level: row['level'],
-    attribute_of_card: row['attribute'],
-    archetype: row['archetype'],
-    image: row['image_url'],
-    card_id: row['card_id'.to_i],
-    description_of_card: row['desc']
+    name:                row["name"],
+    card_type:           row["type"],
+    atk:                 row["atk"],
+    def:                 row["def"],
+    level:               row["level"],
+    attribute_of_card:   row["attribute"],
+    archetype:           row["archetype"],
+    image:               row["image_url"],
+    card_id:             row["card_id".to_i],
+    description_of_card: row["desc"]
   )
 end
-puts 'Finished Seeding Yugioh Cards Table.'
+puts "Finished Seeding Yugioh Cards Table."
 
-puts 'Creating Joiner Table...'
+puts "Creating Joiner Table..."
 csv = CSV.foreach(yugioh_cardset_path, headers: true).take(5000)
 csv.each do |row|
-  card = YugiohCard.find_by(card_id: row['card_id'].to_i)
-  set = YugiohSet.find_by(set_id: row['set_id'].to_i)
+  card = YugiohCard.find_by(card_id: row["card_id"].to_i)
+  set = YugiohSet.find_by(set_id: row["set_id"].to_i)
 
   next unless card.present? && set.present?
 
@@ -71,66 +71,66 @@ csv.each do |row|
 
   cardset = YugiohCardSet.create(
     yugioh_card_id: card.id,
-    yugioh_set_id: set.id,
-    set_rarity: row['set_rarity'],
-    set_code: row['set_rarity_code']
+    yugioh_set_id:  set.id,
+    set_rarity:     row["set_rarity"],
+    set_code:       row["set_rarity_code"]
   )
 end
-puts 'Finished Seeding joiner table.'
+puts "Finished Seeding joiner table."
 
-puts 'Updating joiner table and reprints'
+puts "Updating joiner table and reprints"
 all = YugiohCard.all
 all.each do |card|
   if card.yugioh_card_sets.present?
     card.yugioh_card_sets.each do |cs|
       new_card = YugiohCard.create(
-        name: cs.yugioh_card.name,
-        card_type: cs.yugioh_card.card_type,
-        level: cs.yugioh_card.level,
-        attribute_of_card: cs.yugioh_card.attribute_of_card,
-        archetype: cs.yugioh_card.archetype,
+        name:                cs.yugioh_card.name,
+        card_type:           cs.yugioh_card.card_type,
+        level:               cs.yugioh_card.level,
+        attribute_of_card:   cs.yugioh_card.attribute_of_card,
+        archetype:           cs.yugioh_card.archetype,
         description_of_card: cs.yugioh_card.description_of_card,
-        atk: cs.yugioh_card.atk,
-        def: cs.yugioh_card.def,
-        image: cs.yugioh_card.image
+        atk:                 cs.yugioh_card.atk,
+        def:                 cs.yugioh_card.def,
+        image:               cs.yugioh_card.image
       )
 
       new_card_set = YugiohCardSet.create(
         yugioh_card_id: new_card.id,
-        yugioh_set_id: cs.yugioh_set_id,
-        set_rarity: cs.set_rarity,
-        set_code: cs.set_code
+        yugioh_set_id:  cs.yugioh_set_id,
+        set_rarity:     cs.set_rarity,
+        set_code:       cs.set_code
       )
     end
   else
     new_card = YugiohCard.create(
-      name: card.name,
-      card_type: card.card_type,
-      level: card.level,
-      attribute_of_card: card.attribute_of_card,
-      archetype: card.archetype,
+      name:                card.name,
+      card_type:           card.card_type,
+      level:               card.level,
+      attribute_of_card:   card.attribute_of_card,
+      archetype:           card.archetype,
       description_of_card: card.description_of_card,
-      atk: card.atk,
-      def: card.def,
-      image: card.image
+      atk:                 card.atk,
+      def:                 card.def,
+      image:               card.image
     )
   end
 end
 
-puts 'Deleting old card data'
+puts "Deleting old card data"
 YugiohCardSet.where(yugioh_card_id: YugiohCard.where.not(card_id: nil)).destroy_all
 YugiohCard.where.not(card_id: nil).destroy_all
-puts 'Done.'
+puts "Done."
 
 private def get_y_card_price(rarity)
   case rarity
-  when 'Common'
+  when "Common"
     rand(1..7)
-  when 'Rare'
+  when "Rare"
     rand(10..33)
-  when 'Super Rare'
+  when "Super Rare"
     rand(20..70)
-  when 'Ultra Rare'
+  when "Ultra Rare"
     rand(33..400)
   else
     rand(300..150_000)
@@ -143,27 +143,27 @@ private def calculate_sale_price(price)
   (price * 0.75).round
 end
 
-puts 'Creating Yugioh Products'
+puts "Creating Yugioh Products"
 all_y_cards = YugiohCard.limit(50)
 all_y_cards.each do |card|
   price = if card.yugioh_card_sets.any?
             get_y_card_price(card.yugioh_card_sets.first.set_rarity)
           else
-            get_y_card_price('Common')
+            get_y_card_price("Common")
           end
-  category = Category.find_or_create_by(name: 'Yugioh')
+  category = Category.find_or_create_by(name: "Yugioh")
   Product.create!(
     category:,
-    price_cents: price,
+    price_cents:      price,
     sale_price_cents: calculate_sale_price(price),
-    image_url: card.image,
-    stock: rand(0..100),
-    product_name: card.name,
-    brand: 'Konami',
-    productable: card
+    image_url:        card.image,
+    stock:            rand(0..100),
+    product_name:     card.name,
+    brand:            "Konami",
+    productable:      card
   )
 end
-puts 'Done Yugioh Card Products'
+puts "Done Yugioh Card Products"
 
 def fetch_data(url)
   uri = URI(url)
@@ -177,19 +177,19 @@ def fetch_data(url)
   end
 end
 
-puts 'Seeding Magic Sets'
-sets_base = fetch_data('https://api.scryfall.com/sets')
+puts "Seeding Magic Sets"
+sets_base = fetch_data("https://api.scryfall.com/sets")
 card_urls = []
 n = 0
 
-sets_base['data'].each do |set|
+sets_base["data"].each do |set|
   unless n >= 60 && n <= 61
-    card_urls.push(set['search_uri'])
+    card_urls.push(set["search_uri"])
     MSet.create(
-      name: set['name'],
-      code: set['code'],
-      release_date: set['released_at'],
-      card_count: set['card_count']
+      name:         set["name"],
+      code:         set["code"],
+      release_date: set["released_at"],
+      card_count:   set["card_count"]
     )
   end
 
@@ -200,12 +200,12 @@ end
 
 def generate_price_in_cents
   probabilities = {
-    over_50: 1,
+    over_50:      1,
     twenty_to_50: 4,
-    ten_to_20: 5,
-    four_to_10: 25,
-    one_to_4: 55,
-    under_one: 10
+    ten_to_20:    5,
+    four_to_10:   25,
+    one_to_4:     55,
+    under_one:    10
   }
 
   total_probability = probabilities.values.sum
@@ -217,7 +217,9 @@ def generate_price_in_cents
   cumulative_probability = 0
   probabilities.each do |price_range, probability|
     cumulative_probability += probability
-    return convert_price_range_to_cents(price_range).round if random_number <= cumulative_probability
+    if random_number <= cumulative_probability
+      return convert_price_range_to_cents(price_range).round
+    end
   end
   4
 end
@@ -242,69 +244,69 @@ def convert_price_range_to_cents(price_range)
 end
 
 begin
-  puts 'Creating and seeding Cards'
+  puts "Creating and seeding Cards"
   card_urls.each do |url|
-    if url == 'https://api.scryfall.com/cards/search?include_extras=true&include_variations=true&order=set&q=e%3Aylci&unique=prints'
+    if url == "https://api.scryfall.com/cards/search?include_extras=true&include_variations=true&order=set&q=e%3Aylci&unique=prints"
       puts "Skipping problematic URL: #{url}"
       next
     end
     cards = fetch_data(url)
-    if cards.nil? && !cards['data'].present?
+    if cards.nil? && !cards["data"].present?
       puts "No data available for #{url}"
       next
     end
-    cards['data'].each do |card|
-      mtg_set = MSet.find_by(name: card['set_name'])
-      artist = Artist.find_or_create_by(name: card['artist'])
-      image = card.dig('image_uris', 'png')
+    cards["data"].each do |card|
+      mtg_set = MSet.find_by(name: card["set_name"])
+      artist = Artist.find_or_create_by(name: card["artist"])
+      image = card.dig("image_uris", "png")
       card_face_obj = []
-      price = card['prices'].values.compact.max
+      price = card["prices"].values.compact.max
       price = (price.to_f * 100).round unless price.nil?
       price = generate_price_in_cents if price.nil?
       next if mtg_set.nil?
 
-      if card.key?('card_faces')
-        card_faces = card['card_faces']
+      if card.key?("card_faces")
+        card_faces = card["card_faces"]
         card_faces.each do |cf|
-          cf_image = cf.dig('image_uris', 'png')
+          cf_image = cf.dig("image_uris", "png")
           cf_record = CardFace.create(
-            name: card['name'],
-            mana: card['mana_cost'],
-            type_line: card['type_line'],
-            oracle_text: card['oracle_text'],
-            flavour_text: card['flavor_text'],
-            power: card['power']&.to_i,
-            toughness: card['toughness']&.to_i,
-            image: cf_image
+            name:         card["name"],
+            mana:         card["mana_cost"],
+            type_line:    card["type_line"],
+            oracle_text:  card["oracle_text"],
+            flavour_text: card["flavor_text"],
+            power:        card["power"]&.to_i,
+            toughness:    card["toughness"]&.to_i,
+            image:        cf_image
           )
           card_face_obj.push(cf_record)
         end
       end
 
       mtg_card = Mtg.create(
-        name: card['name'],
-        mana: card['mana_cost'],
-        type_line: card['type_line'],
-        oracle_text: card['oracle_text'],
-        flavour_text: card['flavor_text'],
+        name:         card["name"],
+        mana:         card["mana_cost"],
+        type_line:    card["type_line"],
+        oracle_text:  card["oracle_text"],
+        flavour_text: card["flavor_text"],
         artist:,
-        layout: card['layout'],
-        power: card['power']&.to_i,
-        toughness: card['toughness']&.to_i,
-        m_set: mtg_set,
+        layout:       card["layout"],
+        power:        card["power"]&.to_i,
+        toughness:    card["toughness"]&.to_i,
+        m_set:        mtg_set,
         image:
       )
 
-      category = Category.find_or_create_by(name: 'Magic The Gathering')
+      category = Category.find_or_create_by(name: "Magic The Gathering")
       Product.create!(
         category:,
-        price_cents: price,
+        price_cents:      price,
         sale_price_cents: calculate_sale_price(price),
-        image_url: image,
-        stock: rand(0..100),
-        product_name: card['name'],
-        brand: 'Wizards of the Coast',
-        productable: mtg_card
+        image_url:        image,
+        stock:            rand(0..100),
+        product_name:     card["name"],
+        brand:            "Wizards of the Coast",
+        productable:      mtg_card
       )
 
       next if card_face_obj.nil?
@@ -320,5 +322,6 @@ rescue StandardError => e
   puts e.backtrace.join("\n")
 end
 if Rails.env.development? && AdminUser.count.zero?
-  AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password')
+  AdminUser.create!(email: "admin@example.com", password: "password",
+                    password_confirmation: "password")
 end

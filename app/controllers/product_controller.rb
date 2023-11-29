@@ -7,7 +7,7 @@ class ProductController < ApplicationController
   def search
     @category = Category.find_by(id: params[:category])
     @search = params[:search]
-    @sort_order = params[:sort].to_i 
+    @sort_order = params[:sort].to_i
     @products = Product.all
     case @sort_order
     when 1 # sale

@@ -26,8 +26,8 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
-gem "rubocop", require: false
-
+gem 'rubocop'
+gem 'rubocop-rails'
 gem 'kaminari'
 
 gem 'activeadmin'
