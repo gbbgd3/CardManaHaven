@@ -1,7 +1,7 @@
 ActiveAdmin.register Mtg do
   menu label: 'Magic The Gathering Cards'
   permit_params :name, :mana, :type_line, :oracle_text, :flavour_text, :artist_id, :layout, :power, :toughness, :m_set_id,
-                card_face_ids: []
+                 card_face_ids: [], card_faces_attributes: [:id, :name, :_destroy]
 
   form do |f|
     f.inputs do
@@ -15,10 +15,10 @@ ActiveAdmin.register Mtg do
       f.input :artist
       f.input :m_set
       f.inputs 'Card Faces' do
-        f.input :card_face_ids, as: :select, collection: CardFace.all.map { |cf| [cf.name, cf.id] }
         f.has_many :card_faces, allow_destroy: true, new_record: 'Add Card Face' do |cf|
           cf.input :name
         end
+        f.input :card_face_ids, as: :select, collection: CardFace.all.map { |cf| [cf.name, cf.id] }, input_html: { multiple: true, allow_blank: true }
       end
     end
     f.actions
