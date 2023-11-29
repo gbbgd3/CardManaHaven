@@ -4,10 +4,16 @@
 <div class="w-full flex flex-row flex-wrap gap-4">
   <% @products.each do |product| %>
   <%= link_to product_show_path(product) do %>
-    <div class="flex-basis-0 flex-col max-w-sm bg-white rounded overflow-hidden shadow-lg p-2">
-      <%= image_tag product.image_url, alt: "Yugioh Image", class: "w-full h-48 object-contain"%>
+    <div class="bg-white rounded overflow-hidden shadow-lg p-2">
+      <% if product.image.attached? %>
+      <%= image_tag product.image, alt: 'Card Image', class: 'mb-4', style: 'max-width: 300px;' %>
+      <% elsif product.image_url.present? %>
+        <%= image_tag product.image_url, alt: 'Card Image', class: 'mb-4', style: 'max-width: 300px;' %>
+      <% else %>
+        <%= image_tag 'no_img.png', alt: 'Default Card Image', class: 'mb-4', style: 'max-width: 300px;' %>
+      <% end %>
       <div class="px-2 py-2">
-        <div class="font-bold text-sm">
+        <div class="font-bold text-sm overflow-hidden truncate">
           <%= product.product_name %>
         </div>
         <p class="text-sm">
