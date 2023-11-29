@@ -12,12 +12,19 @@ ActiveAdmin.register Mtg do
       f.input :flavour_text
       f.input :layout
       f.input :power
+      f.input :toughness
       f.input :artist
       f.input :m_set
       f.inputs 'Card Faces' do
         if !f.object.persisted?
           f.has_many :card_faces, new_record: 'Add Card Face' do |cf|
             cf.input :name
+            cf.input :mana
+            cf.input :type_line
+            cf.input :oracle_text
+            cf.input :flavour_text
+            cf.input :power
+            cf.input :toughness
           end
         end
           f.input :card_face_ids, as: :check_boxes, collection: CardFace.all.map { |cf| [cf.name, cf.id] }, input_html: { multiple: true, allow_blank: true }
@@ -38,7 +45,7 @@ ActiveAdmin.register Mtg do
       row :artist
       row :m_set
       row :card_faces do |mtg|
-        mtg.card_faces.map(&:name).join(', ')
+        mtg.card_faces.map { |card_face| link_to(card_face.name, admin_card_face_path(card_face)) }.join(', ').html_safe
       end
     end
     active_admin_comments
