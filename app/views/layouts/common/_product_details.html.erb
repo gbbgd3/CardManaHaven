@@ -1,0 +1,13 @@
+<%= render partial: 'layouts/common/show_price', locals: { product: product } %>
+<% if product.present? %>
+    <p><strong>Category:</strong> <%= link_to product.category.name, categories_path %></p>
+    <p><strong>Stock:</strong> <%= product.stock %></p>
+    <p><strong>Brand:</strong> <%= product.brand %></p>
+<% else %>
+    <p>No product information available.</p>
+<% end %>
+<% if product.stock > 0 %>
+<%= button_to "Add to Cart", root_path, method: :post, class: "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700" %>
+<% else %>
+<%= content_tag :button, "Out of Stock", class: "bg-gray-300 text-gray-500 px-4 py-2 rounded", disabled: true %>
+<% end %>

@@ -29,19 +29,7 @@
     <div class="mb-1">
       <span class="font-semibold">Yugioh Set:</span> <%= @yugioh_card.yugioh_card_sets.present? ? @yugioh_card.yugioh_sets.map(&:set_name).join(', ') : "none" %>
     </div>
-    <%= render partial: 'layouts/common/show_price', locals: { product: @yugioh_card.product } %>
-    <% if @yugioh_card.product.present? %>
-        <p><strong>Category:</strong> <%= link_to @yugioh_card.product.category.name, categories_path %></p>
-        <p><strong>Stock:</strong> <%= @yugioh_card.product.stock %></p>
-        <p><strong>Brand:</strong> <%= @yugioh_card.product.brand %></p>
-    <% else %>
-        <p>No product information available.</p>
-    <% end %>
-    <% if @yugioh_card.product.stock > 0 %>
-    <%= button_to "Add to Cart", root_path, method: :post, class: "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700" %>
-    <% else %>
-    <%= content_tag :button, "Out of Stock", class: "bg-gray-300 text-gray-500 px-4 py-2 rounded", disabled: true %>
-    <% end %>
+    <%= render partial: 'layouts/common/product_details', locals: { product: @yugioh_card.product } %>
     </div>
 </div>
 
