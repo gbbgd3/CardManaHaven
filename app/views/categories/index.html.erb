@@ -8,7 +8,7 @@
           <h2 class="text-lg font-semibold"><%= category.name %></h2>
           <p class="text-gray-500"><%= pluralize(category.products.count, 'product') %></p>
         </div>
-        <a href="/yugioh" class="text-blue-500 hover:underline">View Products</a>
+        <a href=<%="/products/#{(CGI.escape(category.name).downcase).gsub('+', '-')}/search?category=#{category.id}"%> class="text-blue-500 hover:underline">View Products</a>
       </li>
     <% end %>
   </ul>

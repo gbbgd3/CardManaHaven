@@ -1,6 +1,10 @@
 <%= render partial: 'layouts/common/show_price', locals: { product: product } %>
 <% if product.present? %>
-    <p><strong>Category:</strong> <%= link_to product.category.name, categories_path %></p>
+    <p><strong>Category:</strong>
+    <a href=<%="/products/#{(CGI.escape(product.category.name).downcase).gsub('+', '-')}/search?category=#{product.category.id}"%> class="text-blue-500 hover:underline"> 
+        <%= product.category.name %>
+    </a>
+</p>
     <p><strong>Stock:</strong> <%= product.stock %></p>
     <p><strong>Brand:</strong> <%= product.brand %></p>
 <% else %>

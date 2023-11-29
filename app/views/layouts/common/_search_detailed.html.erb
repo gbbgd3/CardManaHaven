@@ -4,10 +4,12 @@
     class="rounded-md flex-shrink-0 bg-white border border-slate-300 py-2 pl-4 pr-8 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
     name="category"
   >
-    <option value='0' selected >Any</option>
+    <option value='0' <%= 'selected' if params[:category].to_i == 0 %> >Any</option>
     <% Category.all.each do |category| %>
-      <option value=<%= category.id %> ><%= category.name %></option>
-    <% end %>
+      <option value=<%= category.id %> <%= 'selected' if params[:category].to_i == category.id %> >
+        <%= category.name %>
+      </option>
+      <% end %>
   </select>
 
   <input
@@ -15,17 +17,17 @@
     placeholder="Search products..."
     type="text"
     name="search"
+    value="<%= params[:search] %>"
   />
 
   <select
-    class="rounded-md flex-shrink-0 mx-6 bg-white border border-slate-300 py-2 pl-4 pr-8 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-    name="sort"
-  >
-    <option value='0' selected >Best Match</option>
-    <option value='1'>On Sale</option>
-    <option value='2'>Newest</option>
-  </select>
-
+  class="rounded-md flex-shrink-0 mx-6 bg-white border border-slate-300 py-2 pl-4 pr-8 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
+  name="sort"
+>
+  <option value='0' <%= 'selected' if params[:sort].to_i == 0 %> >Best Match</option>
+  <option value='1' <%= 'selected' if params[:sort].to_i == 1 %> >On Sale</option>
+  <option value='2' <%= 'selected' if params[:sort].to_i == 2 %> >Newest</option>
+</select>
   <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Search</button>
 </form>
 
