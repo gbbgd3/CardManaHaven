@@ -5,8 +5,8 @@ class SearchController  < ApplicationController
     c= Category.find_by(id: id)
 
     if c
-    redirect_to send("#{(CGI.escape(c.name).downcase).gsub('+', '_')}_search_path", search: search)
-    return
+      redirect_to send("#{(CGI.escape(c.name).downcase).gsub('+', '_')}_search_path", search: search, category: c)
+      return
     end
     redirect_to products_search_path(search: search)
   end

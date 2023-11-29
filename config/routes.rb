@@ -15,14 +15,16 @@ Rails.application.routes.draw do
 
   get "products/yugioh", to: "yugioh#index"
   get "products/yugioh/card/:id", to: 'yugioh#show', as: :yugioh_card
-  get "products/yugioh/search(/:search)", to: 'yugioh#search', as: :yugioh_search
+  #get "products/yugioh/search(/:search)", to: 'yugioh#search', as: :yugioh_search
   
   get "products/magic-the-gathering", to: "mtg#index"
-  get "products/magic-the-gathering/search(/:search)", to: "mtg#search", as: :magic_the_gathering_search
+  #get "products/magic-the-gathering/search(/:search)", to: "mtg#search", as: :magic_the_gathering_search
   get "products/magic-the-gathering/card/:id", to: 'mtg#show', as: :magic_the_gathering_card
 
 
   get '/products', to: 'product#index'
   get '/products/product/:id', to: 'product#show', as: :products_show
   get '/products/search(/:search)', to: 'product#search', as: :products_search
+  get '/products/yugioh/search(/:search)', to: 'product#search', as: :yugioh_search
+  get '/products/magic-the-gathering/search(/:search)', to: 'product#search', as: :magic_the_gathering_search
 end
