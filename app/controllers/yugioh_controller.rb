@@ -7,6 +7,9 @@ class YugiohController < ApplicationController
     end
 
     def show
-      @card = YugiohCard.find_by(id: params[:id])
+      @yugioh_card = Product.find_by(id: params[:id]).productable
+      if @yugioh_card.nil?
+        redirect_to root_path
+      end
     end
 end

@@ -11,11 +11,10 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <%= render partial: 'layouts/common/navbar'%>
+  <body class="flex flex-col min-h-screen">    <%= render partial: 'layouts/common/navbar'%>
     <%= render partial: 'layouts/common/banner'%>
-    <div class="container mx-auto px-12">
-      <%= yield %>
+    <div class="container mx-auto px-12 flex-grow">
+       <%= yield %>
     </div>
     <%= render partial: 'layouts/common/footer'%>
   </body>
