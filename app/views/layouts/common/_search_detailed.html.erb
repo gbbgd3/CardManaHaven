@@ -1,0 +1,32 @@
+<div class="flex flex-row justify-center content-stretch m-4 ">
+  <form action='/search' method='get' class='flex flex-grow flex-row'>
+  <select
+    class="rounded-md flex-shrink-0 bg-white border border-slate-300 py-2 pl-4 pr-8 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
+    name="category"
+  >
+    <option value='0' selected >Any</option>
+    <% Category.all.each do |category| %>
+      <option value=<%= category.id %> ><%= category.name %></option>
+    <% end %>
+  </select>
+
+  <input
+    class="placeholder:italic placeholder-text-slate-400 flex-grow bg-white border border-slate-300 rounded-md py-2 ml-2 mr-2 pl-2 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
+    placeholder="Search products..."
+    type="text"
+    name="search"
+  />
+
+  <select
+    class="rounded-md flex-shrink-0 mx-6 bg-white border border-slate-300 py-2 pl-4 pr-8 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
+    name="sort"
+  >
+    <option value='0' selected >Best Match</option>
+    <option value='1'>On Sale</option>
+    <option value='2'>Newest</option>
+  </select>
+
+  <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Search</button>
+</form>
+
+</div>

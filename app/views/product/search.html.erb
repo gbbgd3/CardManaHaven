@@ -1,4 +1,5 @@
-Search page for any
-<%= @category %>
-<%= @sort_order %>
-<%= @search %>
+<% if @products.count > 0 %>
+  <%= render partial: 'layouts/common/product/product_all', locals: {products: @products} %>
+<% else %>
+  <p>No records found. Please try a different search.</p>
+<%end%>
