@@ -22,12 +22,32 @@ MSet.destroy_all
 Mcf.destroy_all
 CardFace.destroy_all
 Artist.destroy_all
+Province.destroy_all
 
 yugioh_card_path    = "db/csv/yugioh/cards.csv"
 yugioh_cardset_path = "db/csv/yugioh/cards_cardsets.csv"
 yugioh_set_path     = "db/csv/yugioh/cardsets.csv"
 
 csv = CSV.foreach(yugioh_set_path, headers: true).take(100)
+
+puts "Seeding Province Data"
+provinces_data = [
+  { name: 'Alberta', tax_type: 'GST', pst: nil, gst: 5, hst: 5, total_tax_rate: 5 },
+  { name: 'British Columbia', tax_type: 'GST + PST', pst: 7, gst: 5, hst: nil, total_tax_rate: 12 },
+  { name: 'Manitoba', tax_type: 'GST + PST', pst: 7, gst: 5, hst: nil, total_tax_rate: 12 },
+  { name: 'New Brunswick', tax_type: 'HST', pst: nil, gst: nil, hst: 15, total_tax_rate: 15 },
+  { name: 'Newfoundland and Labrador', tax_type: 'HST', pst: nil, gst: nil, hst: 15, total_tax_rate: 15 },
+  { name: 'Northwest Territories', tax_type: 'GST', pst: nil, gst: 5, hst: nil, total_tax_rate: 5 },
+  { name: 'Nova Scotia', tax_type: 'HST', pst: nil, gst: nil, hst: 15, total_tax_rate: 15 },
+  { name: 'Nunavut', tax_type: 'GST', pst: nil, gst: 5, hst: nil, total_tax_rate: 5 },
+  { name: 'Ontario', tax_type: 'HST', pst: nil, gst: nil, hst: 13, total_tax_rate: 13 },
+  { name: 'Prince Edward Island', tax_type: 'HST', pst: nil, gst: nil, hst: 15, total_tax_rate: 15 },
+  { name: 'Quebec', tax_type: 'GST + QST', pst: nil, gst: 5, hst: nil, total_tax_rate: 14.975 },
+  { name: 'Saskatchewan', tax_type: 'GST + PST', pst: 6, gst: 5, hst: nil, total_tax_rate: 11 },
+  { name: 'Yukon', tax_type: 'GST', pst: nil, gst: 5, hst: nil, total_tax_rate: 5 },
+]
+Province.create(provinces_data)
+
 
 puts "Creating #{csv.length} Yugioh Sets..."
 csv.each do |r|
@@ -321,6 +341,7 @@ rescue StandardError => e
   puts "An error occurred: #{e.message}"
   puts e.backtrace.join("\n")
 end
+
 if Rails.env.development? && AdminUser.count.zero?
   AdminUser.create!(email: "admin@example.com", password: "password",
                     password_confirmation: "password")

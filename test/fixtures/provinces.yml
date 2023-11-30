@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  type: 
+  pst: 1.5
+  gst: 1.5
+  hst: 1.5
+  total_tax_rate: 1.5
+
+two:
+  name: MyString
+  type: 
+  pst: 1.5
+  gst: 1.5
+  hst: 1.5
+  total_tax_rate: 1.5

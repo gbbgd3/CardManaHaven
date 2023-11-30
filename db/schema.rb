@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_30_070613) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_30_102105) do
   create_table "abouts", force: :cascade do |t|
     t.string "title"
     t.text "content"
@@ -154,6 +154,17 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_30_070613) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["productable_type", "productable_id"], name: "index_products_on_productable"
+  end
+
+  create_table "provinces", force: :cascade do |t|
+    t.string "name"
+    t.string "tax_type"
+    t.float "pst"
+    t.float "gst"
+    t.float "hst"
+    t.float "total_tax_rate"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
