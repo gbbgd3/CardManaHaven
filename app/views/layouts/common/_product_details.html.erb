@@ -11,7 +11,11 @@
     <p>No product information available.</p>
 <% end %>
 <% if product.stock > 0 %>
-<%= button_to "Add to Cart", root_path, method: :post, class: "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700" %>
+  <% if product_in_cart?(product.id) %>
+    <%= button_to "Remove from Cart", remove_item_path(product.id), method: :delete, class: "bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700" %>
+  <% else %>
+    <%= button_to "Add to Cart", add_to_cart_path(product.id), method: :post, class: "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700" %>
+  <% end %>
 <% else %>
-<%= content_tag :button, "Out of Stock", class: "bg-gray-300 text-gray-500 px-4 py-2 rounded", disabled: true %>
+  <%= button_to "Out of Stock", root_path, class: "bg-gray-300 text-gray-500 px-4 py-2 rounded cursor-not-allowed", disabled: true %>
 <% end %>

@@ -9,4 +9,8 @@ module ApplicationHelper
       root_path
     end
   end
+
+  def product_in_cart?(product_id)
+    session[:cart]&.any? { |item| item["id"].to_i == product_id.to_i }
+  end
 end

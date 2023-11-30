@@ -28,6 +28,11 @@ Rails.application.routes.draw do
   get '/products/yugioh/search(/:search)', to: 'product#search', as: :yugioh_search
   get '/products/magic-the-gathering/search(/:search)', to: 'product#search', as: :magic_the_gathering_search
 
+  post '/cart/add_to_cart/:id', to: 'cart#add_to_cart', as: :add_to_cart
+  patch '/cart/update_quantity/:id', to: 'cart#update_quantity', as: :update_quantity
+  delete '/cart/remove_item/:id', to: 'cart#remove_item', as: :remove_item
+  get '/cart', to: 'cart#show_cart', as: :cart_show
+ 
   resources :about, only: [:index]
   resources :contact, only: [:index]
 end

@@ -43,10 +43,14 @@
         <% else %>
           <p class="text-sm font-sm">Market Price: <%= number_to_currency(product.price_cents / 100.0) %></p>
         <% end %>
-        <% if product.stock < 8 %>
-          <p class="text-sm font-sm">Low Stock: <%= product.stock %></p>
-        <% else %>
+        <% if product.stock > 20 %>
           <p class="text-sm font-sm">Stock: 20+</p>
+        <% elsif product.stock < 8 && product.stock > 0 %>
+          <p class="text-sm font-sm">Low Stock: <%= product.stock %></p>
+        <% elsif product.stock > 0 %>
+        <p class="text-sm font-sm">Stock: <%= product.stock %></p>
+        <% else %>
+          <p class="text-sm font-sm">Out of Stock</p>
         <% end %>
       </div>
     </div>
