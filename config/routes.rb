@@ -27,4 +27,7 @@ Rails.application.routes.draw do
   get '/products/search(/:search)', to: 'product#search', as: :products_search
   get '/products/yugioh/search(/:search)', to: 'product#search', as: :yugioh_search
   get '/products/magic-the-gathering/search(/:search)', to: 'product#search', as: :magic_the_gathering_search
+
+  resources :about, only: [:index]
+  resources :contact, only: [:index]
 end
