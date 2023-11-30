@@ -1,8 +1,10 @@
 class CartController < ApplicationController
+  before_action :check_user
   before_action :load_cart, only: %i[show_cart add_to_cart remove_item update_quantity]
 
   def show_cart
     @cart_items
+    @total_price = !@cart_items.empty? ? calculate_total_price : 0
   end
 
   def add_to_cart
@@ -20,9 +22,6 @@ class CartController < ApplicationController
   def update_quantity
     id = params[:id].to_i
     quantity = params[:quantity].to_i
-    puts id
-    puts quantity
-    puts @cart.inspect
     item = @cart.find { |product| product["id"] == id }
     item["quantity"] = quantity if item
     redirect_back(fallback_location: root_path)
@@ -30,9 +29,15 @@ class CartController < ApplicationController
 
   private
 
+  def check_user
+    if !user_signed_in?
+      redirect_to new_user_session_path
+    end
+  end
+
   def load_cart
+    @cart = session[:cart] ||= []
     @cart_items = build_cart_items
-    @cart = session[:cart] || []
   end
 
   def build_cart_items
@@ -41,6 +46,14 @@ class CartController < ApplicationController
     session[:cart].map do |item|
       product = Product.find_by(id: item["id"].to_i)
       { product:, quantity: item["quantity"].to_i }
+    end
+  end
+
+  def calculate_total_price
+    @cart.sum do |item|
+      product = Product.find_by(id: item["id"].to_i)
+      price_cents = (product.sale_price_cents < product.price_cents) ? product.sale_price_cents : product.price_cents
+      price_cents * item["quantity"].to_i
     end
   end
 end

@@ -29,6 +29,13 @@
       <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Search</button>
       </form>
     </div>
+  <% if user_signed_in? %>
+    Signed in as <%= current_user.email %>.
+    <%= button_to 'Log out', destroy_user_session_path, method: :delete %>
+  <% else %>
+    <%= link_to 'Sign up', new_user_registration_path %> |
+    <%= link_to 'Log in', new_user_session_path %>
+  <% end %>
     <div>
       <%= link_to cart_show_path, class: 'flex items-center space-x-2 text-gray-800 hover:text-gray-600' do %>
       <%= image_tag('https://img.icons8.com/ios-filled/50/000000/shopping-cart.png', alt: 'Cart Icon', class: 'h-6 w-6 fill-current') %>
