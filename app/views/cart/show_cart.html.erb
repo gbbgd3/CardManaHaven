@@ -19,4 +19,9 @@
     <p>Your cart is empty.</p>
   <% end %>
 </div>
+<div class="flex justify-between">
 <%= link_to 'Back to Products', products_path, class: 'inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' %>
+<% if @cart_items.present? %>
+  <%= link_to 'Proceed to Checkout', products_path, class: 'inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' %>
+<% end %>
+</div>
