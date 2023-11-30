@@ -1,46 +1,32 @@
 <div class="max-auto bg-sky-300">
-  <div class="px-10 py-4 flex justify-between items-center">
+  <div class="px-10 py-4 flex flex-center items-center">
     <%= link_to 'Card Magic Heaven', root_path, class:"text-white text-2xl font-bold"%>
-    <ul class="flex justify-around space-x-4">
+    <ul class="flex justify-center flex-grow space-x-4">
         <li><a href="/" class="text-white hover:text-blue-700 text-lg hover:underline">Home</a></li>
         <li><a href="/products" class="text-white hover:text-blue-700 text-lg hover:underline">Products</a></li>
         <li><a href="/products/magic-the-gathering/search?category=<%=Category.find_by(name: "Magic The Gathering").id%>" class="text-white hover:text-blue-700 text-lg hover:underline">Magic The Gathering</a></li>
         <li><a href="/products/yugioh/search?category=<%=Category.find_by(name: "Yugioh").id%>" class="text-white hover:text-blue-700 text-lg hover:underline">Yugioh</a></li>
         <li><a href="/categories" class="text-white hover:text-blue-700 text-lg hover:underline">Categories</a></li>
     </ul>
-
     <div class="flex">
-      <form action='/search' method='get' class='flex'>
-      <select
-        class="rounded-md bg-white inline border border-slate-300 py-2 pl-4 pr-8 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-        name="category"
-      >
-        <option value='0' selected >Any</option>
-      <% Category.all.each do |category| %>
-        <option value=<%= category.id %> ><%= category.name %></option>
-      <% end %>
-      </select>
-    <input
-      class="placeholder:italic placeholder-text-slate-400 inline bg-white w-full border border-slate-300 rounded-md py-2 ml-2 mr-2 pl-2 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-      placeholder="Search products..."
-      type="text"
-      name="search"
-    />
-      <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Search</button>
-      </form>
-    </div>
   <% if user_signed_in? %>
-    Signed in as <%= current_user.email %>.
-    <%= button_to 'Log out', destroy_user_session_path, method: :delete %>
+    Welcome, <%= current_user.email %>
+    <%= button_to 'Log out', destroy_user_session_path, method: :delete, class:"px-4"%>
   <% else %>
-    <%= link_to 'Sign up', new_user_registration_path %> |
-    <%= link_to 'Log in', new_user_session_path %>
+    <%= link_to 'Sign up', new_user_registration_path, class:"px-4" %> |
+    <%= link_to 'Log in', new_user_session_path, class:"px-4"%>
   <% end %>
+    </div>
     <div>
       <%= link_to cart_show_path, class: 'flex items-center space-x-2 text-gray-800 hover:text-gray-600' do %>
       <%= image_tag('https://img.icons8.com/ios-filled/50/000000/shopping-cart.png', alt: 'Cart Icon', class: 'h-6 w-6 fill-current') %>
         <span class="hidden md:inline-block">Cart</span>
       <% end %>
     </div>
+  </div>
+</div>
+<div class="bg-slate-800">
+  <div class="mx-40">
+  <%= render partial: "layouts/common/search_detailed"%>
   </div>
 </div>
