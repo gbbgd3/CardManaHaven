@@ -4,7 +4,7 @@ ActiveAdmin.register Product do
                 :product_name, :brand, :productable_id, :image
 
   form do |f|
-    f.inputs 'Product Details' do
+    f.inputs "Product Details" do
       f.input :category
       f.input :price_cents
       f.input :sale_price_cents
@@ -19,7 +19,7 @@ ActiveAdmin.register Product do
 
       productable_options = (YugiohCard.left_joins(:product).where(products: { id: nil }).to_a +
       Mtg.left_joins(:product).where(products: { id: nil }).to_a)
-      .uniq.map { |card| [card.name, card.id] }
+                            .uniq.map { |card| ["#{card.name} | #{card.class.name}", card.id] }
 
       if current_productable_id.present?
         productable_options << [f.object.productable.name, current_productable_id]
@@ -30,7 +30,6 @@ ActiveAdmin.register Product do
     f.actions
   end
 
-
   show do
     attributes_table do
       row :category
@@ -38,7 +37,7 @@ ActiveAdmin.register Product do
       row :sale_price_cents
       row :product_detail
       row :image do |product|
-        image_tag(product.image, width: '100px') if product.image.present?
+        image_tag(product.image, width: "100px") if product.image.present?
       end
       row :stock
       row :product_name
