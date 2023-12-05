@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_04_185623) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_05_122331) do
   create_table "abouts", force: :cascade do |t|
     t.string "title"
     t.text "content"
@@ -140,6 +140,33 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_04_185623) do
     t.index ["m_set_id"], name: "index_mtgs_on_m_set_id"
   end
 
+  create_table "order_products", force: :cascade do |t|
+    t.integer "product_id"
+    t.integer "order_id", null: false
+    t.string "product_name"
+    t.integer "product_price"
+    t.integer "product_quantity"
+    t.integer "product_subtotal"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_order_products_on_order_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "status_id", null: false
+    t.string "stripe_id"
+    t.datetime "order_complete_date"
+    t.integer "subtotal"
+    t.integer "total"
+    t.integer "tax_rate"
+    t.string "tax_display"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["status_id"], name: "index_orders_on_status_id"
+    t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
   create_table "products", force: :cascade do |t|
     t.integer "category_id"
     t.integer "price_cents"
@@ -163,6 +190,12 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_04_185623) do
     t.float "gst"
     t.float "hst"
     t.float "total_tax_rate"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "statuses", force: :cascade do |t|
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -224,6 +257,9 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_04_185623) do
   add_foreign_key "mcfs", "mtgs"
   add_foreign_key "mtgs", "artists"
   add_foreign_key "mtgs", "m_sets"
+  add_foreign_key "order_products", "orders"
+  add_foreign_key "orders", "statuses"
+  add_foreign_key "orders", "users"
   add_foreign_key "users", "provinces"
   add_foreign_key "yugioh_card_sets", "yugioh_cards"
   add_foreign_key "yugioh_card_sets", "yugioh_sets"

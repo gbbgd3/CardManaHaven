@@ -8,4 +8,5 @@ class User < ApplicationRecord
   validates :province, presence: true
 
   belongs_to :province
+  has_many :orders
 end

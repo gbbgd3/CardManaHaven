@@ -1,0 +1,31 @@
+<h1 class="text-2xl font-bold mb-2">Your Orders</h1>
+<% if @orders.present? %>
+  <% @orders.each do |order| %>
+    <div class="order-details bg-gray-100 p-4 mb-8 rounded-md shadow-md">
+    <h3 class="text-2xl font-bold mb-2">Order #<%= order.id %></h3>
+    <p><span class="font-bold">Status:</span> <%= order.status.name %></p>
+    <p><span class="font-bold">Stripe ID:</span> <%= order.stripe_id %></p>
+
+    <h4 class="text-xl font-bold mt-4 mb-2">Order Products</h4>
+    <ul class="list-disc pl-4">
+    <% order.order_products.each do |order_product| %>
+        <li class="mb-2">
+        <%= link_to order_product.product_name, product_show_path(Product.find_by(id: order_product.product_id)), class: "text-blue-500 hover:underline" %> -
+        Quantity: <%= order_product.product_quantity %>,
+        Price: <%= number_to_currency(order_product.product_price / 100.0) %>,
+        Subtotal: <%= number_to_currency(order_product.product_subtotal / 100.0) %>
+        </li>
+    <% end %>
+    </ul>
+        <div class="mt-4">
+            <p><span class="font-bold">Subtotal:</span> <%= number_to_currency(order.subtotal / 100.0) %></p>
+            <p><span class="font-bold">Total:</span> <%= number_to_currency(order.total / 100.0) %></p>
+            <div class="flex">
+                <p><span class="font-bold">Tax Information:</span> <%= order.tax_display %> <%= order.tax_rate %>%</p>
+            </div>
+        </div>
+    </div>
+    <% end %>
+  <% else %>
+  <h1>You Have no Orders Placed.</h1>
+<% end %>

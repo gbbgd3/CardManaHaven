@@ -23,6 +23,7 @@ Mcf.destroy_all
 CardFace.destroy_all
 Artist.destroy_all
 Province.destroy_all
+Status.destroy_all
 
 yugioh_card_path    = "db/csv/yugioh/cards.csv"
 yugioh_cardset_path = "db/csv/yugioh/cards_cardsets.csv"
@@ -47,6 +48,13 @@ provinces_data = [
   { name: 'Yukon', tax_type: 'GST', pst: nil, gst: 5, hst: nil, total_tax_rate: 5 },
 ]
 Province.create(provinces_data)
+
+status_data = [
+  { name: 'new' },
+  { name: 'paid' },
+  { name: 'shipped' },
+]
+Status.create(status_data)
 
 
 puts "Creating #{csv.length} Yugioh Sets..."
@@ -266,11 +274,11 @@ end
 begin
   puts "Creating and seeding Cards"
   card_urls.each do |url|
-    if url == "https://api.scryfall.com/cards/search?include_extras=true&include_variations=true&order=set&q=e%3Aylci&unique=prints"
-      puts "Skipping problematic URL: #{url}"
+    cards = fetch_data(url)
+    if(cards.nil?)
+      puts "Skipping bad URL..."
       next
     end
-    cards = fetch_data(url)
     if cards.nil? && !cards["data"].present?
       puts "No data available for #{url}"
       next
