@@ -33,29 +33,30 @@ csv = CSV.foreach(yugioh_set_path, headers: true).take(100)
 
 puts "Seeding Province Data"
 provinces_data = [
-  { name: 'Alberta', tax_type: 'GST', pst: nil, gst: 5, hst: 5, total_tax_rate: 5 },
-  { name: 'British Columbia', tax_type: 'GST + PST', pst: 7, gst: 5, hst: nil, total_tax_rate: 12 },
-  { name: 'Manitoba', tax_type: 'GST + PST', pst: 7, gst: 5, hst: nil, total_tax_rate: 12 },
-  { name: 'New Brunswick', tax_type: 'HST', pst: nil, gst: nil, hst: 15, total_tax_rate: 15 },
-  { name: 'Newfoundland and Labrador', tax_type: 'HST', pst: nil, gst: nil, hst: 15, total_tax_rate: 15 },
-  { name: 'Northwest Territories', tax_type: 'GST', pst: nil, gst: 5, hst: nil, total_tax_rate: 5 },
-  { name: 'Nova Scotia', tax_type: 'HST', pst: nil, gst: nil, hst: 15, total_tax_rate: 15 },
-  { name: 'Nunavut', tax_type: 'GST', pst: nil, gst: 5, hst: nil, total_tax_rate: 5 },
-  { name: 'Ontario', tax_type: 'HST', pst: nil, gst: nil, hst: 13, total_tax_rate: 13 },
-  { name: 'Prince Edward Island', tax_type: 'HST', pst: nil, gst: nil, hst: 15, total_tax_rate: 15 },
-  { name: 'Quebec', tax_type: 'GST + QST', pst: nil, gst: 5, hst: nil, total_tax_rate: 14.975 },
-  { name: 'Saskatchewan', tax_type: 'GST + PST', pst: 6, gst: 5, hst: nil, total_tax_rate: 11 },
-  { name: 'Yukon', tax_type: 'GST', pst: nil, gst: 5, hst: nil, total_tax_rate: 5 },
+  { name: "Alberta", tax_type: "GST", pst: nil, gst: 5, hst: 5, total_tax_rate: 5 },
+  { name: "British Columbia", tax_type: "GST + PST", pst: 7, gst: 5, hst: nil, total_tax_rate: 12 },
+  { name: "Manitoba", tax_type: "GST + PST", pst: 7, gst: 5, hst: nil, total_tax_rate: 12 },
+  { name: "New Brunswick", tax_type: "HST", pst: nil, gst: nil, hst: 15, total_tax_rate: 15 },
+  { name: "Newfoundland and Labrador", tax_type: "HST", pst: nil, gst: nil, hst: 15,
+total_tax_rate: 15 },
+  { name: "Northwest Territories", tax_type: "GST", pst: nil, gst: 5, hst: nil, total_tax_rate: 5 },
+  { name: "Nova Scotia", tax_type: "HST", pst: nil, gst: nil, hst: 15, total_tax_rate: 15 },
+  { name: "Nunavut", tax_type: "GST", pst: nil, gst: 5, hst: nil, total_tax_rate: 5 },
+  { name: "Ontario", tax_type: "HST", pst: nil, gst: nil, hst: 13, total_tax_rate: 13 },
+  { name: "Prince Edward Island", tax_type: "HST", pst: nil, gst: nil, hst: 15,
+total_tax_rate: 15 },
+  { name: "Quebec", tax_type: "GST + QST", pst: nil, gst: 5, hst: nil, total_tax_rate: 14.975 },
+  { name: "Saskatchewan", tax_type: "GST + PST", pst: 6, gst: 5, hst: nil, total_tax_rate: 11 },
+  { name: "Yukon", tax_type: "GST", pst: nil, gst: 5, hst: nil, total_tax_rate: 5 }
 ]
 Province.create(provinces_data)
 
 status_data = [
-  { name: 'new' },
-  { name: 'paid' },
-  { name: 'shipped' },
+  { name: "new" },
+  { name: "paid" },
+  { name: "shipped" }
 ]
 Status.create(status_data)
-
 
 puts "Creating #{csv.length} Yugioh Sets..."
 csv.each do |r|
@@ -275,7 +276,7 @@ begin
   puts "Creating and seeding Cards"
   card_urls.each do |url|
     cards = fetch_data(url)
-    if(cards.nil?)
+    if cards.nil?
       puts "Skipping bad URL..."
       next
     end

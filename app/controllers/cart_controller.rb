@@ -3,7 +3,6 @@ class CartController < ApplicationController
   before_action :load_cart, only: %i[show_cart add_to_cart remove_item update_quantity]
 
   def show_cart
-    @cart_items
     @total_price = !@cart_items.empty? ? calculate_total_price : 0
   end
 
@@ -50,11 +49,11 @@ class CartController < ApplicationController
   def calculate_total_price
     @cart.sum do |item|
       product = Product.find_by(id: item["id"].to_i)
-      price_cents = (product.sale_price_cents < product.price_cents) ? product.sale_price_cents : product.price_cents
+      price_cents = product.sale_price_cents < product.price_cents ? product.sale_price_cents : product.price_cents
       puts "Price_cents before Tax and qty #{price_cents}"
       taxed_price = price_cents + price_cents * (current_user.province.total_tax_rate / 100)
       puts "Price_cents after Tax and not qty #{taxed_price}"
       taxed_price * item["quantity"].to_i
     end
-  end  
+  end
 end
