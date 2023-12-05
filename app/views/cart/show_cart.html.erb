@@ -10,7 +10,7 @@
     <ul>
       <% @cart_items.each do |item| %>
         <li class="mb-4 flex flex-col justfiy-between">
-          <p class="text-xl font-bold"><%= link_to item[:product].product_name, product_show_path(item[:product]), class: "text-blue-500 hover:underline" %></p>
+          <p class="text-xl font-bold"><%= link_to item[:product].product_name, item[:product].productable.present? ? product_show_path(item[:product]) : products_show_path(item[:product]), class: "text-blue-500 hover:underline" %></p>
           <p><span class="font-bold">Price:</span> <%= number_to_currency(item[:product].sale_price_cents / 100.0) %></p>
           <br>
           <%= form_tag update_quantity_path(item[:product].id), method: :patch, remote: true, class: 'flex justify-between items-center py-2' do %>

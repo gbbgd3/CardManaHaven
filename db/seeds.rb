@@ -11,6 +11,7 @@
 require "csv"
 require "net/http"
 require "json"
+require "faker"
 
 Product.destroy_all
 Category.destroy_all
@@ -57,6 +58,18 @@ status_data = [
   { name: "shipped" }
 ]
 Status.create(status_data)
+
+puts "Category"
+inital_category = [
+  { name: "Card Sleeves" },
+  { name: "Playmats" }
+]
+
+Category.create!(inital_category)
+
+
+card_sleeves_category = Category.find_or_create_by(name: "Card Sleeves")
+playmats_category = Category.find_or_create_by(name: "Playmats")
 
 puts "Creating #{csv.length} Yugioh Sets..."
 csv.each do |r|
@@ -271,6 +284,35 @@ def convert_price_range_to_cents(price_range)
     rand(1..1000)
   end
 end
+
+puts "Creating other products"
+
+10.times do
+  price = Faker::Commerce.price(range: 5..20.0, as_string: true)
+  Product.create!(
+    category: card_sleeves_category,
+    price_cents: price.to_i * 100,
+    sale_price_cents: calculate_sale_price(price.to_i),
+    image_url: Faker::LoremFlickr.image,
+    stock: rand(0..100),
+    product_name: Faker::Lorem.word,
+    brand: Faker::Company.name,
+  )
+end
+
+10.times do
+  price = Faker::Commerce.price(range: 10..50.0, as_string: true)
+  Product.create!(
+    category: playmats_category,
+    price_cents: price.to_i * 100,
+    sale_price_cents:  calculate_sale_price(price.to_i),
+    image_url: Faker::LoremFlickr.image,
+    stock: rand(0..100),
+    product_name: Faker::Lorem.word,
+    brand: Faker::Company.name
+  )
+end
+
 
 begin
   puts "Creating and seeding Cards"

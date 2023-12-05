@@ -36,6 +36,8 @@ gem 'sassc'
 
 gem 'stripe'
 
+gem 'faker'
+
 gem 'rack-cors', :require => 'rack/cors'
 
 # Use Redis adapter to run Action Cable in production

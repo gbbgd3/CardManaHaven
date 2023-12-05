@@ -4,6 +4,10 @@ class ProductController < ApplicationController
     @products_total = Product.all.count
   end
 
+  def show
+    @product = Product.find_by(id: params[:id])
+  end
+
   def search
     @category = Category.find_by(id: params[:category])
     @search = params[:search]

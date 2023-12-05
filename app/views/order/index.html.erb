@@ -10,7 +10,7 @@
     <ul class="list-disc pl-4">
     <% order.order_products.each do |order_product| %>
         <li class="mb-2">
-        <%= link_to order_product.product_name, product_show_path(Product.find_by(id: order_product.product_id)), class: "text-blue-500 hover:underline" %> -
+        <%= link_to order_product.product_name, Product.find_by(id: order_product.product_id).productable.present? ? product_show_path((Product.find_by(id: order_product.product_id))) : products_show_path((Product.find_by(id: order_product.product_id))), class: "text-blue-500 hover:underline" %> -
         Quantity: <%= order_product.product_quantity %>,
         Price: <%= number_to_currency(order_product.product_price / 100.0) %>,
         Subtotal: <%= number_to_currency(order_product.product_subtotal / 100.0) %>

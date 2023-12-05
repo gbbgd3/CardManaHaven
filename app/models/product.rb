@@ -5,7 +5,7 @@ class Product < ApplicationRecord
   validates :product_name, presence: true
   validates :brand, presence: true
   validates :category, presence: true
-  belongs_to :productable, polymorphic: true
+  belongs_to :productable, optional: true, polymorphic: true
   belongs_to :category
   has_one_attached :image
   has_many :order_products
