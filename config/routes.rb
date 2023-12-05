@@ -33,7 +33,15 @@ Rails.application.routes.draw do
   patch '/cart/update_quantity/:id', to: 'cart#update_quantity', as: :update_quantity
   delete '/cart/remove_item/:id', to: 'cart#remove_item', as: :remove_item
   get '/cart', to: 'cart#show_cart', as: :cart_show
+  get '/user/orders', to: 'order#index', as: :orders
  
   resources :about, only: [:index]
   resources :contact, only: [:index]
+  resources :checkout do
+    collection do
+      post :create_checkout_session
+      get :success
+      get :cancel
+    end
+  end
 end

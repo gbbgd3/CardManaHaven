@@ -51,7 +51,10 @@ class CartController < ApplicationController
     @cart.sum do |item|
       product = Product.find_by(id: item["id"].to_i)
       price_cents = (product.sale_price_cents < product.price_cents) ? product.sale_price_cents : product.price_cents
-      price_cents * item["quantity"].to_i
+      puts "Price_cents before Tax and qty #{price_cents}"
+      taxed_price = price_cents + price_cents * (current_user.province.total_tax_rate / 100)
+      puts "Price_cents after Tax and not qty #{taxed_price}"
+      taxed_price * item["quantity"].to_i
     end
-  end
+  end  
 end

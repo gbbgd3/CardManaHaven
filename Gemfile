@@ -34,6 +34,10 @@ gem 'activeadmin'
 gem 'devise'
 gem 'sassc'
 
+gem 'stripe'
+
+gem 'rack-cors', :require => 'rack/cors'
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 

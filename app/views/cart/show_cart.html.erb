@@ -1,3 +1,8 @@
+<% flash.each do |key, value| %>
+  <div class="alert alert-<%= key %>">
+    <%= value %>
+  </div>
+<% end %>
 <h1 class="text-2xl font-bold mb-4">Your Shopping Cart</h1>
 <div class="justify-around max-w-2xl mx-auto p-4">
   <% if @cart_items.present? %>
@@ -22,6 +27,28 @@
 <div class="flex justify-between">
 <%= link_to 'Back to Products', products_path, class: 'inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' %>
 <% if @cart_items.present? %>
-  <%= link_to 'Proceed to Checkout', products_path, class: 'inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' %>
+  <%= button_to "Checkout", create_checkout_session_checkout_index_path, method: :post, data: { turbo: false }, class: 'inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' %>
 <% end %>
 </div>
+
+<style>
+  .alert {
+    padding: 1em;
+    margin: 1em 0;
+  }
+
+  .alert-notice {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+
+  .alert-alert {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+
+  .alert-success {
+    background-color: #d4edda;
+    color: #155724;
+  }
+</style>
